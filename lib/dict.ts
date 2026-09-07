@@ -205,6 +205,7 @@ export const CORE: Record<string, Entry> = {
   "Fully translated · native review in progress": ["Entièrement traduit · révision par des locuteurs natifs en cours", "Totalmente traducido · revisión nativa en curso", "Volledig vertaald · moedertaalcontrole loopt", "Terjemahan lengkap · tinjauan penutur asli berlangsung"],
   "Fully translated · native review": ["Entièrement traduit · révision native", "Totalmente traducido · revisión nativa", "Volledig vertaald · moedertaalcontrole", "Terjemahan lengkap · tinjauan penutur asli"],
   "interface strings (auto-extracted)": ["chaînes d'interface (extraites automatiquement)", "cadenas de interfaz (extraídas automáticamente)", "interfaceteksten (automatisch geëxtraheerd)", "string antarmuka (diekstrak otomatis)"],
+  "Wed 23:00 CST": ["Mer 23:00 CST", "Mié 23:00 CST", "Wo 23:00 CST", "Rab 23:00 CST"],
 };
 
 export const DICT: Record<string, Entry> = { ...(GENERATED as unknown as Record<string, Entry>), ...CORE };

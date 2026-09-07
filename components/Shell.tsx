@@ -23,17 +23,17 @@ export function Icon({ name, className = "ic", size = 18 }: { name: string; clas
 }
 
 /* Role-specific status strip: the four or five numbers this person checks first every day. */
-const STRIPS: Record<string, Array<{ icon: LucideIcon; k: L; v: string; tone?: string }>> = {
+const STRIPS: Record<string, Array<{ icon: LucideIcon; k: L; v: string | L; tone?: string }>> = {
   learn: [
     { icon: Flame, k: { zh: "连续学习", en: "Streak", sw: "Mfululizo" }, v: "12d", tone: "gold" },
     { icon: Clock, k: { zh: "今日目标", en: "Today", sw: "Leo" }, v: "11 / 15′" },
     { icon: Download, k: { zh: "离线包", en: "Offline packs", sw: "Vifurushi" }, v: "6 / 8", tone: "good" },
-    { icon: Radio, k: { zh: "下次直播", en: "Next live", sw: "Somo lijalo" }, v: "Wed 16:00" },
+    { icon: Radio, k: { zh: "下次直播", en: "Next live", sw: "Somo lijalo" }, v: { zh: "周三 16:00", en: "Wed 16:00", sw: "Jumatano 16:00" } },
   ],
   teach: [
     { icon: CheckCircle2, k: { zh: "待签发", en: "To sign", sw: "Kuidhinisha" }, v: "3", tone: "warn" },
     { icon: Inbox, k: { zh: "AI 提议", en: "Proposals", sw: "Mapendekezo" }, v: "2", tone: "warn" },
-    { icon: Radio, k: { zh: "下次直播", en: "Next live", sw: "Somo lijalo" }, v: "Wed 23:00 CST" },
+    { icon: Radio, k: { zh: "下次直播", en: "Next live", sw: "Somo lijalo" }, v: { zh: "周三 23:00 CST", en: "Wed 23:00 CST", sw: "Jumatano 23:00 CST" } },
     { icon: Clock, k: { zh: "本周课时", en: "Hours this week", sw: "Saa wiki hii" }, v: "6.5", tone: "good" },
   ],
   ops: [
@@ -98,7 +98,7 @@ export default function Shell({ role, nav, title, sub, net = 3, children, action
         </div>
         {strip.length > 0 && (
           <div className="strip">
-            {strip.map((s, i) => { const I = s.icon; return <div key={i} className={`strip__item ${s.tone ?? ""}`}><I size={15} strokeWidth={1.75} /><span className="strip__k">{t(s.k)}</span><b className="strip__v num">{s.v}</b></div>; })}
+            {strip.map((s, i) => { const I = s.icon; return <div key={i} className={`strip__item ${s.tone ?? ""}`}><I size={15} strokeWidth={1.75} /><span className="strip__k">{t(s.k)}</span><b className="strip__v num">{typeof s.v === "string" ? s.v : t(s.v)}</b></div>; })}
             <EnvBadge compact />
           </div>
         )}
