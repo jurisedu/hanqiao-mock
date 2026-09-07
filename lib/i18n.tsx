@@ -1,13 +1,21 @@
 "use client";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { DICT } from "./dict";
 
-export type Lang = "zh" | "en" | "sw";
-export type L = { zh: string; en: string; sw: string };
-export const LANGS: { code: Lang; label: string }[] = [
-  { code: "zh", label: "中文" },
-  { code: "en", label: "English" },
-  { code: "sw", label: "Kiswahili" },
+export type Lang = "zh" | "en" | "sw" | "fr" | "es" | "nl" | "id";
+export type L = { zh: string; en: string; sw: string; fr?: string; es?: string; nl?: string; id?: string };
+export const LANGS: { code: Lang; label: string; short: string }[] = [
+  { code: "zh", label: "中文", short: "中" },
+  { code: "en", label: "English", short: "EN" },
+  { code: "sw", label: "Kiswahili", short: "SW" },
+  { code: "fr", label: "Français", short: "FR" },
+  { code: "es", label: "Español", short: "ES" },
+  { code: "nl", label: "Nederlands", short: "NL" },
+  { code: "id", label: "Bahasa Indonesia", short: "ID" },
 ];
+const CODES = LANGS.map((l) => l.code);
+const HTML_LANG: Record<Lang, string> = { zh: "zh-Hans", en: "en", sw: "sw", fr: "fr", es: "es", nl: "nl", id: "id" };
+const DICT_INDEX: Record<string, number> = { fr: 0, es: 1, nl: 2, id: 3 };
 
 const Ctx = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({ lang: "zh", setLang: () => {} });
 
@@ -16,23 +24,33 @@ export function LangProvider({ children, initial = "zh" }: { children: ReactNode
   useEffect(() => {
     try {
       const saved = localStorage.getItem("hq_lang") as Lang | null;
-      if (saved && ["zh", "en", "sw"].includes(saved)) setLangState(saved);
+      if (saved && CODES.includes(saved)) { setLangState(saved); document.documentElement.lang = HTML_LANG[saved]; }
     } catch {}
   }, []);
   const setLang = (l: Lang) => {
     setLangState(l);
     try { localStorage.setItem("hq_lang", l); } catch {}
-    document.documentElement.lang = l === "zh" ? "zh-Hans" : l;
+    document.documentElement.lang = HTML_LANG[l];
   };
   return <Ctx.Provider value={{ lang, setLang }}>{children}</Ctx.Provider>;
 }
 
 export function useLang() { return useContext(Ctx); }
 
-/** Pick the current language from a trilingual string. */
+/** Resolve a string for the current language. zh / en / sw are authored inline; fr / es / nl / id come from the
+    central dictionary keyed by the English text, and fall back to English when a phrase has no entry yet. */
+export function resolve(s: L | string, lang: Lang): string {
+  if (typeof s === "string") return s;
+  const direct = s[lang];
+  if (direct) return direct;
+  const i = DICT_INDEX[lang];
+  if (i !== undefined) { const hit = DICT[s.en]; if (hit) return hit[i]; }
+  return s.en;
+}
+
 export function useT() {
   const { lang } = useContext(Ctx);
-  return (s: L | string) => (typeof s === "string" ? s : s[lang] ?? s.en);
+  return (s: L | string) => resolve(s, lang);
 }
 
 export const t3 = (zh: string, en: string, sw: string): L => ({ zh, en, sw });
@@ -70,7 +88,8 @@ export const UI = {
   signOut: t3("退出", "Sign out", "Toka"),
   role: t3("角色", "Role", "Nafasi"),
   switchRole: t3("切换角色", "Switch role", "Badilisha nafasi"),
-  mock: t3("演示环境 · 数据为模拟", "Preview · sample data", "Onyesho · data ya mfano"),
+  mock: t3("演示环境 · 全部数据为模拟", "Preview environment · all data is sample data", "Mazingira ya onyesho · data zote ni za mfano"),
+  env: t3("演示环境", "Preview environment", "Mazingira ya onyesho"),
   download: t3("下载", "Download", "Pakua"),
   downloaded: t3("已下载", "Downloaded", "Imepakuliwa"),
   sync: t3("同步", "Sync", "Sawazisha"),
@@ -81,4 +100,5 @@ export const UI = {
   aiAssist: t3("AI 辅助", "AI-assisted", "Msaada wa AI"),
   source: t3("出处", "Source", "Chanzo"),
   abstain: t3("拿不准，已转老师", "Unsure, sent to teacher", "Sina uhakika, imetumwa kwa mwalimu"),
+  partial: t3("核心界面已翻译，详细内容暂以英文显示", "Core interface translated; detailed content shown in English for now", "Kiolesura kikuu kimetafsiriwa; maudhui ya kina kwa Kiingereza kwa sasa"),
 };

@@ -41,6 +41,8 @@ export const opsNav: NavItem[] = [
   { href: "/ops/compliance", label: t3("合规与审计", "Compliance & audit", "Uzingatiaji na ukaguzi"), icon: "shield" },
   { href: "/ops/billing", label: t3("席位与结算", "Seats & billing", "Viti na malipo"), icon: "pay" },
   { href: "/ops/network", label: t3("网络与分发", "Network & delivery", "Mtandao na usambazaji"), icon: "globe" },
+  { href: "/ops/support", label: t3("客服中心", "Support centre", "Kituo cha usaidizi"), icon: "inbox", pill: "7", group: t3("服务", "Service", "Huduma") },
+  { href: "/ops/languages", label: t3("语言包", "Language packs", "Vifurushi vya lugha"), icon: "languages" },
 ];
 
 export const schoolRole: Role = { key: "school", label: t3("学校管理员 · Great Heights", "School admin · Great Heights", "Msimamizi wa shule · Great Heights"), name: "Mrs. Adaeze", initials: "AD", tone: "gold" };

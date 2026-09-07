@@ -247,3 +247,65 @@ body.learner ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); background
 .trace span { padding: 4px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; background: var(--panel-2); border: 1px solid var(--line); }
 .trace span.route { color: var(--accent-2); } .trace span.ground { color: var(--gold); } .trace span.recall { color: var(--violet); } .trace span.verify { color: var(--good); } .trace span.human { color: var(--warn); }
 .trace i { color: var(--dim); font-style: normal; }
+
+/* ---------- Polish pass: environment badge, role strip, texture, icons ---------- */
+.env{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--gold);background:rgba(212,175,90,.12);border:1px solid rgba(212,175,90,.4);white-space:nowrap}
+.env--compact{margin-left:auto}
+body.learner .env{background:rgba(184,145,47,.1)}
+.side__foot{display:flex;flex-direction:column;gap:10px}
+.side__switch{color:var(--accent-2);font-weight:600}
+.side__role{position:relative}.side__role-chev{margin-left:auto;opacity:.5}
+.strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-2px 0 18px}
+.strip__item{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:12.5px;color:var(--mute)}
+.strip__item svg{color:var(--accent-2)}
+.strip__item.good svg{color:var(--good)}.strip__item.warn svg{color:var(--warn)}.strip__item.gold svg{color:var(--gold)}
+.strip__v{color:var(--text);font-size:13px}
+body.learner .strip__item{background:#fff}
+.main{background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:26px 26px;background-position:0 0}
+body.learner .main{background-image:radial-gradient(rgba(17,21,40,.06) 1px,transparent 1px)}
+.nav a{font-size:13.5px}
+.nav .ic{width:18px;height:18px;opacity:.9}
+.nav a[aria-current="page"] .ic{color:var(--accent-2)}
+body.learner .nav a[aria-current="page"] .ic{color:var(--accent)}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.03))}
+body.learner .panel{background:#fff}
+.panel--glow{background:linear-gradient(180deg,rgba(108,140,255,.12),rgba(108,140,255,.03))}
+body.learner .panel--glow{background:linear-gradient(180deg,#eef1fb,#fff)}
+.search svg{opacity:.7}
+.role .ic{color:var(--accent-2)}.role.gold .ic{color:var(--gold)}.role.green .ic{color:var(--good)}
+
+/* ---------- Phone showcase ---------- */
+.stage{display:flex;gap:34px;overflow-x:auto;padding:30px 20px 46px;perspective:1600px;scroll-snap-type:x proximity}
+.stage>*{scroll-snap-align:center;flex:0 0 auto}
+.device{width:312px;border-radius:46px;padding:10px;background:linear-gradient(160deg,#2a2f45,#0b0e1c 40%,#0b0e1c 60%,#1c2035);box-shadow:0 50px 90px -34px rgba(0,0,0,.85),inset 0 0 0 1.5px rgba(255,255,255,.14),inset 0 0 0 4px #05070f;position:relative;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.device::before{content:"";position:absolute;left:-2px;top:110px;width:3px;height:34px;border-radius:2px;background:#2a2f45}
+.device::after{content:"";position:absolute;right:-2px;top:150px;width:3px;height:60px;border-radius:2px;background:#2a2f45}
+.device:hover{transform:translateY(-10px) rotateY(0deg) scale(1.02)}
+.screen{border-radius:38px;overflow:hidden;height:640px;position:relative;font-size:12.5px;background:#f6f5f0;color:#111528;isolation:isolate}
+.screen.dark{background:linear-gradient(180deg,#0d1430,#070b18);color:#e9edf8}
+.screen::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.14),transparent 30%,transparent 70%,rgba(255,255,255,.05));pointer-events:none;z-index:5}
+.sbar{display:flex;justify-content:space-between;align-items:center;padding:14px 26px 0;font-size:12px;font-weight:700;position:relative;z-index:3}
+.sbar span{display:inline-flex;align-items:center;gap:5px}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:96px;height:28px;border-radius:20px;background:#05070f;z-index:4;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.island::after{content:"";position:absolute;right:12px;top:9px;width:10px;height:10px;border-radius:50%;background:#0f1a3a;box-shadow:inset 0 0 0 2px #1a2a55}
+.screen__body{padding:18px 18px 92px;height:100%;overflow:hidden}
+.tabbar{position:absolute;left:0;right:0;bottom:0;padding:10px 14px 22px;display:flex;justify-content:space-around;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);border-top:1px solid rgba(0,0,0,.06);z-index:3}
+.screen.dark .tabbar{background:rgba(13,20,48,.86);border-top-color:rgba(255,255,255,.08)}
+.tabbar span{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:#8a90a8}
+.tabbar span.on{color:#1f3aa8}.screen.dark .tabbar span.on{color:#9db1ff}
+.homebar{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:112px;height:4px;border-radius:4px;background:rgba(0,0,0,.28);z-index:4}
+.screen.dark .homebar{background:rgba(255,255,255,.35)}
+.device__cap{text-align:center;font-size:12px;color:var(--mute);margin-top:12px;letter-spacing:.04em}
+.app-hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;margin-bottom:20px}
+.app-hero h1{font-family:var(--serif);font-size:clamp(30px,3.6vw,46px);line-height:1.2}
+.app-hero p{color:var(--mute);margin-top:12px;max-width:56ch;font-size:15px}
+.app-feat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:8px}
+.app-feat .panel{display:flex;gap:12px;align-items:flex-start}
+.app-feat .panel svg{flex:none;color:var(--accent-2);margin-top:2px}
+@media (max-width:960px){.app-hero{grid-template-columns:1fr}.app-feat{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.app-feat{grid-template-columns:1fr}.device{width:290px}}
+.langsel{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--mute);font-size:12.5px}
+.langsel select{background:transparent;border:0;color:var(--text);font:inherit;font-weight:600;cursor:pointer;outline:none}
+.langsel select option{color:#111}
+body.learner .langsel{background:#fff}
+.langwrap{display:flex;flex-direction:column;align-items:flex-start}

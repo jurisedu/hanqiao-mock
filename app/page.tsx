@@ -4,6 +4,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useT, t3 } from "@/lib/i18n";
 import LangSwitch from "@/components/LangSwitch";
+import EnvBadge from "@/components/EnvBadge";
 import { Icon } from "@/components/Shell";
 
 const Globe3D = dynamic(() => import("@/components/Globe3D"), { ssr: false });
@@ -21,8 +22,8 @@ export default function Landing() {
   return (
     <div className="landing">
       <div className="landing__top">
-        <div className="side__brand"><Image src="/seal.png" alt="" width={40} height={40} /><span><b style={{ letterSpacing: ".14em" }}>{t(t3("汉桥", "HanQiao", "HanQiao"))}</b><small className="mute" style={{ display: "block", fontSize: 11 }}>{t(t3("GACEE 中文学习平台 · 演示", "GACEE Chinese learning platform · preview", "Jukwaa la GACEE · onyesho"))}</small></span></div>
-        <div className="row"><LangSwitch /><Link href="/app" className="btn btn--sm">{t(t3("App 界面", "App screens", "Skrini za App"))}</Link><Link href="/login" className="btn btn--primary btn--sm">{t(t3("登录", "Sign in", "Ingia"))}</Link></div>
+        <div className="side__brand"><Image src="/seal.png" alt="" width={40} height={40} /><span><b style={{ letterSpacing: ".14em" }}>{t(t3("汉桥", "HanQiao", "HanQiao"))}</b><small className="mute" style={{ display: "block", fontSize: 11 }}>{t(t3("GACEE 中文学习平台 · 演示环境", "GACEE Chinese learning platform · preview environment", "Jukwaa la GACEE · mazingira ya onyesho"))}</small></span></div>
+        <div className="row"><EnvBadge /><LangSwitch /><Link href="/app" className="btn btn--sm">{t(t3("App 界面", "App screens", "Skrini za App"))}</Link><Link href="/login" className="btn btn--primary btn--sm">{t(t3("登录", "Sign in", "Ingia"))}</Link></div>
       </div>
       <section className="landing__hero">
         <div className="in">
@@ -52,14 +53,14 @@ export default function Landing() {
       <section className="roles">
         {roles.map((r, i) => (
           <Link key={r.href} href={r.href} className={`role ${r.cls} in in-${i + 1}`}>
-            <div className="ic"><Icon name={r.icon} className="ic" /></div>
+            <div className="ic"><Icon name={r.icon} className="ic" size={22} /></div>
             <h3>{t(r.title)}</h3>
             <p>{t(r.body)}</p>
             <div className="between"><span className="dim small">{r.tag}</span><span className="go">{t(t3("进入", "Enter", "Ingia"))} →</span></div>
           </Link>
         ))}
       </section>
-      <div className="dim small" style={{ padding: "0 40px 40px" }}>GACEE × Juris&amp;Edu AI Technology · {t(t3("演示环境，全部数据为模拟", "Preview environment, all data is sample data", "Mazingira ya onyesho, data zote ni za mfano"))}</div>
+      <div className="dim small" style={{ padding: "0 40px 40px" }}>GACEE × Juris&amp;Edu AI Technology · {t(t3("演示环境 · 全部数据为模拟，不代表真实学员与学校", "Preview environment · all data is sample data and represents no real learner or school", "Mazingira ya onyesho · data zote ni za mfano"))}</div>
     </div>
   );
 }

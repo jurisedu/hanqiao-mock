@@ -8,8 +8,8 @@ const noto = Noto_Sans_SC({ subsets: ["latin"], weight: ["400", "500", "700"], v
 const serif = Noto_Serif_SC({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-serif", display: "swap", preload: false });
 
 export const metadata: Metadata = {
-  title: { default: "汉桥 HanQiao · GACEE 中文学习平台", template: "%s · 汉桥 HanQiao" },
-  description: "Teacher-led, AI-assisted Chinese learning platform preview. GACEE × Juris&Edu AI Technology.",
+  title: { default: "汉桥 HanQiao · GACEE 中文学习平台 · 演示环境", template: "%s · 汉桥 HanQiao · 演示环境" },
+  description: "Preview environment of the teacher-led, AI-assisted Chinese learning platform. Sample data only. GACEE × Juris&Edu AI Technology.",
   robots: { index: false, follow: false },
   icons: { icon: "/icon.png", apple: "/apple-touch-icon.png" },
 };
