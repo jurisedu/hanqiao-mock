@@ -100,5 +100,5 @@ export const UI = {
   aiAssist: t3("AI 辅助", "AI-assisted", "Msaada wa AI"),
   source: t3("出处", "Source", "Chanzo"),
   abstain: t3("拿不准，已转老师", "Unsure, sent to teacher", "Sina uhakika, imetumwa kwa mwalimu"),
-  partial: t3("核心界面已翻译，详细内容暂以英文显示", "Core interface translated; detailed content shown in English for now", "Kiolesura kikuu kimetafsiriwa; maudhui ya kina kwa Kiingereza kwa sasa"),
+  partial: t3("界面已全量翻译 · 母语审校进行中", "Fully translated · native review in progress", "Imetafsiriwa kikamilifu · ukaguzi wa mzawa unaendelea"),
 };

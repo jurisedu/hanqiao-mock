@@ -4,10 +4,11 @@ import Shell from "@/components/Shell";
 import { Panel, Head, Badge, Bar, Stat } from "@/components/ui";
 import { opsRole, opsNav } from "@/lib/roles";
 import { useT, t3, LANGS, type Lang } from "@/lib/i18n";
-import { DICT } from "@/lib/dict";
+import { DICT, CORE_COUNT } from "@/lib/dict";
 import { CheckCircle2, Pencil, Sparkles, Upload, Download, ShieldCheck, Languages as LanguagesIcon, AlertTriangle } from "lucide-react";
 
-const TOTAL = 958; // strings extracted from the interface (see scripts in the repo)
+const TOTAL = 1159; // distinct English strings extracted from the interface (extraction script in the repo)
+const COVERED = Math.min(1, Object.keys(DICT).length / TOTAL);
 type Row = { key: string; src: string; tr: string; status: "published" | "review" | "draft" | "flagged"; by: string; at: string };
 
 export default function LanguagePacks() {
@@ -15,8 +16,8 @@ export default function LanguagePacks() {
   const [lang, setLang] = useState<Lang>("fr");
   const [tab, setTab] = useState<"strings" | "glossary" | "workflow">("strings");
   const idx = { fr: 0, es: 1, nl: 2, id: 3 }[lang as "fr" | "es" | "nl" | "id"] ?? -1;
-  const coverage: Record<Lang, number> = { zh: 1, en: 1, sw: 0.97, fr: Object.keys(DICT).length / TOTAL, es: Object.keys(DICT).length / TOTAL, nl: Object.keys(DICT).length / TOTAL, id: Object.keys(DICT).length / TOTAL };
-  const status: Record<Lang, [string, "good" | "warn" | "acc" | ""]> = { zh: [t(t3("已发布", "Published", "Imechapishwa")), "good"], en: [t(t3("已发布 · 源语言", "Published · source", "Imechapishwa · chanzo")), "good"], sw: [t(t3("母语审校中", "Native review", "Ukaguzi wa mzawa")), "warn"], fr: [t(t3("核心已发布 · 内容待译", "Core published · content pending", "Kiini kimechapishwa")), "acc"], es: [t(t3("核心已发布 · 内容待译", "Core published · content pending", "Kiini kimechapishwa")), "acc"], nl: [t(t3("核心已发布 · 内容待译", "Core published · content pending", "Kiini kimechapishwa")), "acc"], id: [t(t3("核心已发布 · 内容待译", "Core published · content pending", "Kiini kimechapishwa")), "acc"] };
+  const coverage: Record<Lang, number> = { zh: 1, en: 1, sw: 0.97, fr: COVERED, es: COVERED, nl: COVERED, id: COVERED };
+  const status: Record<Lang, [string, "good" | "warn" | "acc" | ""]> = { zh: [t(t3("已发布", "Published", "Imechapishwa")), "good"], en: [t(t3("已发布 · 源语言", "Published · source", "Imechapishwa · chanzo")), "good"], sw: [t(t3("母语审校中", "Native review", "Ukaguzi wa mzawa")), "warn"], fr: [t(t3("已全量翻译 · 母语审校中", "Fully translated · native review", "Imetafsiriwa · ukaguzi wa mzawa")), "good"], es: [t(t3("已全量翻译 · 母语审校中", "Fully translated · native review", "Imetafsiriwa · ukaguzi wa mzawa")), "good"], nl: [t(t3("已全量翻译 · 母语审校中", "Fully translated · native review", "Imetafsiriwa · ukaguzi wa mzawa")), "good"], id: [t(t3("已全量翻译 · 母语审校中", "Fully translated · native review", "Imetafsiriwa · ukaguzi wa mzawa")), "good"] };
   const rows: Row[] = useMemo(() => {
     const keys = Object.keys(DICT).slice(0, 14);
     return keys.map((k, i) => ({ key: k, src: k, tr: idx >= 0 ? DICT[k][idx] : k, status: (["published", "published", "review", "published", "draft", "published", "flagged"] as Row["status"][])[i % 7], by: ["M. Dubois", "AI draft", "S. Okonkwo", "L. van Dijk"][i % 4], at: `09-0${(i % 6) + 1}` }));
@@ -32,7 +33,7 @@ export default function LanguagePacks() {
       <div className="grid c4">
         <Panel className="in in-1"><Stat value={7} label={t3("界面语言", "interface languages", "lugha za kiolesura")} /></Panel>
         <Panel className="in in-2"><Stat value={TOTAL} label={t3("界面字符串（自动提取）", "interface strings (auto-extracted)", "mistari ya kiolesura")} /></Panel>
-        <Panel className="in in-3"><Stat value={Object.keys(DICT).length * 4} label={t3("新语言已审词条", "reviewed entries in new languages", "vipengele vilivyokaguliwa")} delta="+" /></Panel>
+        <Panel className="in in-3"><Stat value={Object.keys(DICT).length * 4} label={t3("新语言词条（4 语）· 人工审校 " + CORE_COUNT * 4, "entries in new languages (×4) · human-reviewed " + CORE_COUNT * 4, "vipengele katika lugha mpya")} delta="+" /></Panel>
         <Panel className="in in-4"><Stat value={3} label={t3("待处理标记（用户反馈）", "open flags (user feedback)", "alama zilizo wazi")} up={false} /></Panel>
 
         <Panel className="span2 in in-2"><Head title={t3("语言与覆盖率", "Languages & coverage", "Lugha na ufikiaji")} right={<button className="btn btn--sm"><LanguagesIcon size={14} /> {t(t3("新增语言", "Add language", "Ongeza lugha"))}</button>} />
