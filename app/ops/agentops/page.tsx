@@ -3,11 +3,12 @@ import Shell from "@/components/Shell";
 import { Panel, Head, Stat, Badge, Spark, Bars, Trace } from "@/components/ui";
 import { opsRole, opsNav } from "@/lib/roles";
 import { useT, t3 } from "@/lib/i18n";
-import { subjectAgents, jeArray } from "@/lib/data";
+import { subjectAgents, jeArray, agents } from "@/lib/data";
 import { Bot, Cpu } from "lucide-react";
 
 export default function AgentOps() {
   const t = useT();
+  const learnerOnly = agents.filter((a) => !subjectAgents.some((s) => s.code === a.code));
   const runs = [["09-05 14:02", "tutor", "Amara", "route→ground→recall→answer", 1.8, "sourced"], ["09-05 14:01", "coach", "Chidi", "asr→gop→verify→human", 2.4, "handoff"], ["09-05 13:58", "exam", "Class A", "assemble→grade→verify→write", 6.1, "written"], ["09-05 13:55", "tutor", "Fatima", "route→ground→abstain", 0.9, "abstain"], ["09-05 13:52", "homeroom", "Wang", "ground→recall→draft", 3.2, "draft"]];
   return (
     <Shell role={opsRole} nav={opsNav} title="AgentOps" sub={t3("Harness 评估监控层：单次运行轨迹、有出处率、幻觉率、护栏命中、转人工率、Token 成本", "Harness evaluation layer: run traces, sourced rate, hallucination rate, guardrail hits, hand-off rate, token cost", "Tabaka la tathmini: nyayo za utekelezaji, kiwango cha vyanzo, makosa, gharama")} net={3}>
@@ -24,9 +25,10 @@ export default function AgentOps() {
         <Panel className="span2 in in-5"><Head title={t3("Token 与成本 · 按智能体", "Tokens & cost by agent", "Tokeni na gharama kwa wakala")} /><ul className="list small">{[["tutor", 48, 41], ["coach", 12, 22], ["review", 6, 3], ["talk", 18, 19], ["exam", 9, 8], ["homeroom", 7, 7]].map(([a, tok, cost]) => <li key={a as string}><Badge tone="acc">{a}</Badge><div className="t"><span>{tok as number}% {t(t3("token", "tokens", "tokeni"))} · {cost as number}% {t(t3("成本", "cost", "gharama"))}</span></div><span className="mono small mute">{a === "coach" ? "ASR/TTS" : "LLM"}</span></li>)}</ul></Panel>
 
         <Panel className="span4 in in-6"><Head title={jeArray} right={<Badge tone="acc"><Cpu size={12} /> {t(t3("JE 引擎 · 8 模型 · 16 知识库", "JE Engine · 8 models · 16 KBs", "Injini ya JE · mifano 8"))}</Badge>} />
-          <div className="small mute" style={{ marginBottom: 12 }}>{t(t3("12 个学科智能体 + 5 个学习智能体，由 JE 引擎统一混合编排；备课工坊、答疑、复习、评测共用同一阵列，同一套护栏与出处约束。", "12 subject agents + 5 learning agents, orchestrated by the JE Engine; the Lesson Studio, Q&A, review and assessment share one array under the same guardrails and sourcing rules.", "Mawakala 12 wa masomo + 5 wa kujifunza, wanaopangwa na Injini ya JE."))}</div>
+          <div className="small mute" style={{ marginBottom: 12 }}>{t(t3("15 个智能体统一编排：12 教学 + 3 学习专属；「发音正音 JE-09」「考试评测 JE-04」师生跨端复用（同一智能体）。共用同一套护栏与出处约束。", "15 agents, one orchestration: 12 teaching + 3 learner-only; Pronunciation (JE-09) & Assessment (JE-04) are reused across teacher and learner (same agent). One set of guardrails and sourcing.", "Mawakala 15, mpangilio mmoja: 12 kufundisha + 3 kujifunza; JE-09 na JE-04 hutumika pande zote."))}</div>
           <div className="experts">
-            {subjectAgents.map((e) => <div key={e.id} className="expert on"><span className="expert__ic"><Bot size={15} /></span><span className="expert__t"><b><span className="expert__code">{e.code}</span>{t(e.name)}</b><small>{t(e.role)}</small></span></div>)}
+            {subjectAgents.map((e) => <div key={e.id} className="expert on"><span className="expert__ic"><Bot size={15} /></span><span className="expert__t"><b><span className="expert__code">{e.code}</span>{t(e.name)}</b><small>{t(e.role)}</small></span>{e.shared && <Badge tone="acc">{t(t3("跨端", "shared", "-"))}</Badge>}</div>)}
+            {learnerOnly.map((a) => <div key={a.id} className="expert on"><span className="expert__ic"><Bot size={15} /></span><span className="expert__t"><b><span className="expert__code">{a.code}</span>{t(a.name)}</b><small>{t(a.desc)}</small></span><Badge tone="gold">{t(t3("学习端", "learner", "-"))}</Badge></div>)}
           </div>
         </Panel>
       </div>

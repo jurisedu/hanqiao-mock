@@ -31,27 +31,30 @@ export const statusLabel: Record<string, L> = {
 export const jeEngine = t3("JE 引擎", "JE Engine", "Injini ya JE");
 export const jeArray = t3("JE 混合编排智能体阵列", "JE hybrid-orchestration agent array", "Mkusanyiko wa mawakala wa JE");
 
-export const agents = [
-  { id: "tutor", name: t3("伴学智能体", "Study Companion", "Rafiki wa Masomo"), desc: t3("规划路径、调难度、有出处答疑", "Plans your path, adjusts difficulty, answers with sources", "Hupanga njia, hubadilisha ugumu, hujibu kwa vyanzo"), style: t3("耐心 · 慢速 · 斯瓦希里语提示", "Patient · slow pace · Kiswahili hints", "Mvumilivu · polepole · vidokezo vya Kiswahili"), color: "#6c8cff" },
-  { id: "coach", name: t3("发音智能体", "Pronunciation Coach", "Kocha wa Matamshi"), desc: t3("声调与音素评分，用老师音色示范", "Tone and phoneme scoring, demos in your teacher's voice", "Alama za toni na sauti, mifano kwa sauti ya mwalimu"), style: t3("严格 · 第三声重点", "Strict · focus on tone 3", "Mkali · lenga toni ya 3"), color: "#d4af5a" },
-  { id: "review", name: t3("复习智能体", "Review Agent", "Wakala wa Marudio"), desc: t3("按遗忘曲线安排卡片，离线可用", "Schedules cards by forgetting curve, works offline", "Hupanga kadi kwa mkondo wa kusahau, hufanya kazi nje ya mtandao"), style: t3("每天 15 分钟 · 晚 8 点提醒", "15 min daily · 8 pm reminder", "Dakika 15 kila siku · kikumbusho saa 2 usiku"), color: "#3ed598" },
-  { id: "talk", name: t3("对话智能体", "Conversation Partner", "Mshirika wa Mazungumzo"), desc: t3("点餐、问路、自我介绍角色扮演", "Role-play: ordering food, directions, introductions", "Igizo: kuagiza chakula, maelekezo, kujitambulisha"), style: t3("温和纠错 · 在线优先", "Gentle corrections · online first", "Masahihisho ya upole · mtandaoni kwanza"), color: "#a78bfa" },
-  { id: "exam", name: t3("评测智能体", "Assessment Agent", "Wakala wa Tathmini"), desc: t3("组卷、模拟考、双智能体交叉批改", "Builds quizzes and mock exams, two-agent cross-grading", "Huunda majaribio, usahihishaji wa wakala wawili"), style: t3("主观题转老师", "Subjective items go to teacher", "Maswali ya maoni huenda kwa mwalimu"), color: "#5ad8e6" },
+/* Learner-facing view of the JE array. Codes share the namespace with subjectAgents: 发音正音 (JE-09)
+   and 考试评测 (JE-04) are the SAME agents the teacher's Lesson Studio uses (shared: true), reused
+   learner-side; 伴学中枢/复习巩固/情景对话 are learner-only members (JE-13/14/15). */
+export const agents: { id: string; code: string; name: L; desc: L; style: L; color: string; shared?: boolean }[] = [
+  { id: "tutor", code: "JE-13", name: t3("伴学中枢", "Study Companion", "Rafiki wa Masomo"), desc: t3("规划路径、调难度、有出处答疑", "Plans your path, adjusts difficulty, answers with sources", "Hupanga njia, hubadilisha ugumu, hujibu kwa vyanzo"), style: t3("耐心 · 慢速 · 斯瓦希里语提示", "Patient · slow pace · Kiswahili hints", "Mvumilivu · polepole · vidokezo vya Kiswahili"), color: "#6c8cff" },
+  { id: "coach", code: "JE-09", name: t3("发音正音", "Pronunciation Coach", "Kocha wa Matamshi"), desc: t3("声调与音素评分，用老师音色示范", "Tone and phoneme scoring, demos in your teacher's voice", "Alama za toni na sauti, mifano kwa sauti ya mwalimu"), style: t3("严格 · 第三声重点", "Strict · focus on tone 3", "Mkali · lenga toni ya 3"), color: "#d4af5a", shared: true },
+  { id: "review", code: "JE-14", name: t3("复习巩固", "Review Agent", "Wakala wa Marudio"), desc: t3("按遗忘曲线安排卡片，离线可用", "Schedules cards by forgetting curve, works offline", "Hupanga kadi kwa mkondo wa kusahau, hufanya kazi nje ya mtandao"), style: t3("每天 15 分钟 · 晚 8 点提醒", "15 min daily · 8 pm reminder", "Dakika 15 kila siku · kikumbusho saa 2 usiku"), color: "#3ed598" },
+  { id: "talk", code: "JE-15", name: t3("情景对话", "Conversation Partner", "Mshirika wa Mazungumzo"), desc: t3("点餐、问路、自我介绍角色扮演", "Role-play: ordering food, directions, introductions", "Igizo: kuagiza chakula, maelekezo, kujitambulisha"), style: t3("温和纠错 · 在线优先", "Gentle corrections · online first", "Masahihisho ya upole · mtandaoni kwanza"), color: "#a78bfa" },
+  { id: "exam", code: "JE-04", name: t3("考试评测", "Assessment Agent", "Wakala wa Tathmini"), desc: t3("组卷、模拟考、双智能体交叉批改", "Builds quizzes and mock exams, two-agent cross-grading", "Huunda majaribio, usahihishaji wa wakala wawili"), style: t3("主观题转老师", "Subjective items go to teacher", "Maswali ya maoni huenda kwa mwalimu"), color: "#5ad8e6", shared: true },
 ];
 
 /* The 12 subject agents of the JE array — a signature 山海同文 roster of classically-named AI scholars
    (name = distinctive persona, role = plain function). Shared by the Lesson Studio and AgentOps.
    `icon` is a lucide key mapped to a component by each consumer (keeps this data file icon-free). */
-export const subjectAgents: { id: string; code: string; name: L; role: L; icon: string }[] = [
+export const subjectAgents: { id: string; code: string; name: L; role: L; icon: string; shared?: boolean }[] = [
   { id: "lead", code: "JE-01", name: t3("教研中枢", "Curriculum Core", "Uongozi wa Mtaala"), role: t3("统筹目标与教学结构", "Owns objectives & lesson structure", "Malengo na muundo"), icon: "compass" },
   { id: "child", code: "JE-02", name: t3("儿童心理", "Child Psychology", "Saikolojia ya Mtoto"), role: t3("年龄适配 · 趣味与专注", "Age fit · fun & attention", "Umri · furaha"), icon: "smile" },
   { id: "culture", code: "JE-03", name: t3("国别文化", "Country & Culture", "Utamaduni wa Nchi"), role: t3("国别情境 · 文化点与禁忌", "Country context · culture & taboos", "Muktadha wa nchi"), icon: "globe" },
-  { id: "exam", code: "JE-04", name: t3("考试评测", "Assessment", "Tathmini"), role: t3("对齐 HSK/YCT · 智能命题", "Aligns HSK/YCT · item generation", "Kupanga HSK/YCT"), icon: "clipboard" },
+  { id: "exam", code: "JE-04", name: t3("考试评测", "Assessment", "Tathmini"), role: t3("对齐 HSK/YCT · 智能命题", "Aligns HSK/YCT · item generation", "Kupanga HSK/YCT"), icon: "clipboard", shared: true },
   { id: "local", code: "JE-05", name: t3("本土教法", "Local Pedagogy", "Ufundishaji wa Mahali"), role: t3("本土课堂适配", "Adapts to local classrooms", "Kurekebisha darasa"), icon: "mappin" },
   { id: "hw", code: "JE-06", name: t3("华文教研", "Chinese-Ed Research", "Utafiti wa Elimu"), role: t3("母语区教研经验", "Home-region teaching depth", "Uzoefu wa ufundishaji"), icon: "book" },
   { id: "material", code: "JE-07", name: t3("教材甄选", "Materials", "Uteuzi wa Vifaa"), role: t3("教材对齐 · 智能选材", "Aligns & selects materials", "Kuchagua vifaa"), icon: "library" },
   { id: "game", code: "JE-08", name: t3("互动游戏", "Interaction", "Michezo"), role: t3("游戏化互动设计", "Gamified interaction design", "Muundo wa michezo"), icon: "gamepad" },
-  { id: "voice", code: "JE-09", name: t3("发音正音", "Pronunciation", "Matamshi"), role: t3("声调 · 拼音 · 跟读评分", "Tones · pinyin · echo-read scoring", "Toni · pinyin"), icon: "mic" },
+  { id: "voice", code: "JE-09", name: t3("发音正音", "Pronunciation", "Matamshi"), role: t3("声调 · 拼音 · 跟读评分", "Tones · pinyin · echo-read scoring", "Toni · pinyin"), icon: "mic", shared: true },
   { id: "reading", code: "JE-10", name: t3("分级阅读", "Graded Reading", "Kusoma kwa Viwango"), role: t3("分级读本 · 阅读活动", "Levelled readers · activities", "Vitabu vya viwango"), icon: "bookmarked" },
   { id: "visual", code: "JE-11", name: t3("视觉设计", "Visual Design", "Ubunifu wa Taswira"), role: t3("版式 · 配色 · 配图", "Layout · colour · imagery", "Muundo · rangi"), icon: "palette" },
   { id: "family", code: "JE-12", name: t3("家校沟通", "Home-School", "Mawasiliano"), role: t3("家长反馈 · 作业沟通", "Parent feedback · homework notes", "Maoni ya wazazi"), icon: "chat" },
