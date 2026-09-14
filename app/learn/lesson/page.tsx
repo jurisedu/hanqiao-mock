@@ -34,7 +34,7 @@ export default function Lesson() {
             <div className="small between"><span>{t(t3("本月流量", "Data this month", "Data mwezi huu"))}</span><b>38 / 200 MB</b></div><Bar v={0.19} tone="good" />
             <div className="small mute" style={{ marginTop: 10 }}>{t(t3("省流模式已开：仅 Wi-Fi 下载，视频默认 240p，图片压缩。夜间 02:00 自动补齐内容包。", "Low-data mode on: Wi-Fi-only downloads, 240p video, compressed images. Packs top up automatically at 02:00.", "Hali ya data kidogo: upakuaji kwa Wi-Fi tu, video 240p, picha zilizobanwa. Vifurushi hukamilika saa 8 usiku."))}</div>
           </Panel>
-          <Panel className="in in-4"><Head title={t3("课后由 Agent 生成", "Generated after the lesson", "Huundwa baada ya somo")} /><ul className="list"><li><div className="t"><b>{t(t3("复习卡 8 张", "8 review cards", "Kadi 8 za marudio"))}</b><span>{t(t3("杯 · 点 · 想 · 服务员…", "杯 · 点 · 想 · 服务员…", "杯 · 点 · 想 · 服务员…"))}</span></div></li><li><div className="t"><b>{t(t3("情景对话：点餐", "Role-play: ordering", "Igizo: kuagiza"))}</b><span>{t(t3("老师音色 · 在线优先", "Teacher's voice · online first", "Sauti ya mwalimu · mtandaoni kwanza"))}</span></div></li></ul></Panel>
+          <Panel className="in in-4"><Head title={t3("课后由智能体生成", "Generated after the lesson", "Huundwa baada ya somo")} /><ul className="list"><li><div className="t"><b>{t(t3("复习卡 8 张", "8 review cards", "Kadi 8 za marudio"))}</b><span>{t(t3("杯 · 点 · 想 · 服务员…", "杯 · 点 · 想 · 服务员…", "杯 · 点 · 想 · 服务员…"))}</span></div></li><li><div className="t"><b>{t(t3("情景对话：点餐", "Role-play: ordering", "Igizo: kuagiza"))}</b><span>{t(t3("老师音色 · 在线优先", "Teacher's voice · online first", "Sauti ya mwalimu · mtandaoni kwanza"))}</span></div></li></ul></Panel>
         </div>
       </div>
     </Shell>

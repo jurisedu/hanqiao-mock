@@ -10,7 +10,7 @@ import { Icon } from "@/components/Shell";
 const Globe3D = dynamic(() => import("@/components/Globe3D"), { ssr: false });
 
 const roles = [
-  { href: "/learn", icon: "home", cls: "", title: t3("学员端", "Learner", "Mwanafunzi"), body: t3("离线优先的学、练、考、读；专属 Agent 花名册与知识星图。", "Offline-first learning, practice, exams and reading; personal agents and a 3D knowledge map.", "Kujifunza nje ya mtandao, mazoezi, mitihani na kusoma; mawakala binafsi na ramani ya maarifa ya 3D."), tag: "Amara · HSK 1 · Lagos" },
+  { href: "/learn", icon: "home", cls: "", title: t3("学员端", "Learner", "Mwanafunzi"), body: t3("离线优先的学、练、考、读；专属智能体花名册与知识星图。", "Offline-first learning, practice, exams and reading; personal agents and a 3D knowledge map.", "Kujifunza nje ya mtandao, mazoezi, mitihani na kusoma; mawakala binafsi na ramani ya maarifa ya 3D."), tag: "Amara · HSK 1 · Lagos" },
   { href: "/teach", icon: "check", cls: "gold", title: t3("老师端", "Teacher", "Mwalimu"), body: t3("复核队列、AI 提议审批、直播降级控制台、录课与音色复刻。", "Review queue, AI proposal approvals, live console with degradation, recording and voice cloning.", "Foleni ya ukaguzi, idhini ya mapendekezo ya AI, kidhibiti cha moja kwa moja, kurekodi na sauti."), tag: "王老师 · 郑州" },
   { href: "/ops", icon: "ops", cls: "green", title: t3("运营 / 教务", "Operations", "Uendeshaji"), body: t3("租户、内容包分发、AgentOps、合规审计、席位结算。", "Tenants, content delivery, AgentOps, compliance audit, seat billing.", "Wapangaji, usambazaji wa maudhui, AgentOps, ukaguzi, malipo ya viti."), tag: "Singapore core" },
   { href: "/school", icon: "school", cls: "gold", title: t3("学校管理员", "School admin", "Msimamizi wa shule"), body: t3("学员、设备共享、出勤、家长同意、报告与证书。", "Learners, shared devices, attendance, parental consent, reports and certificates.", "Wanafunzi, vifaa vya pamoja, mahudhurio, idhini ya wazazi, ripoti na vyeti."), tag: "Great Heights School" },
@@ -29,7 +29,7 @@ export default function Landing() {
         <div className="in">
           <div className="eyebrow">{t(t3("老师为根 · 非洲为试金石 · 弱网离线为默认 · 合规入地基", "Teachers first · Africa as the proving ground · offline by default · compliance in the foundation", "Walimu kwanza · Afrika kama uwanja wa majaribio · nje ya mtandao kwa chaguo-msingi"))}</div>
           <h1 style={{ marginTop: 14 }}>{t(t3("在最困难的地方，", "Chinese learning that keeps working", "Kujifunza Kichina kunakoendelea"))}<br /><em>{t(t3("也能被老师和孩子长期用起来的中文教育 AI。", "where the network does not.", "hata mtandao unapokosekana."))}</em></h1>
-          <p>{t(t3("远程中文老师跨境直播与录播授课；JE Agent 混合编排与每用户持续记忆放大师资；TIDAR KAG 让每一次答疑有出处、拿不准就交给老师。", "Remote teachers teach live and recorded across borders; JE Agent orchestration and per-learner memory multiply scarce teachers; TIDAR KAG answers with sources and hands uncertainty to a human.", "Walimu hufundisha moja kwa moja na kwa rekodi; uratibu wa JE Agent na kumbukumbu ya kila mwanafunzi huzidisha walimu; TIDAR KAG hujibu kwa vyanzo na hukabidhi mashaka kwa mwalimu."))}</p>
+          <p>{t(t3("远程中文老师跨境直播与录播授课；JE 混合编排智能体阵列与每用户持续记忆放大师资；TIDAR KAG 让每一次答疑有出处、拿不准就交给老师。", "Remote teachers teach live and recorded across borders; JE Agent orchestration and per-learner memory multiply scarce teachers; TIDAR KAG answers with sources and hands uncertainty to a human.", "Walimu hufundisha moja kwa moja na kwa rekodi; uratibu wa JE Agent na kumbukumbu ya kila mwanafunzi huzidisha walimu; TIDAR KAG hujibu kwa vyanzo na hukabidhi mashaka kwa mwalimu."))}</p>
           <div className="row" style={{ marginTop: 26 }}>
             <Link href="/learn" className="btn btn--primary">{t(t3("进入学员端", "Open learner app", "Fungua app ya mwanafunzi"))}</Link>
             <Link href="/teach" className="btn">{t(t3("进入老师端", "Open teacher console", "Fungua dawati la mwalimu"))}</Link>
@@ -46,7 +46,7 @@ export default function Landing() {
         </div>
       </section>
       <div className="landing__strip">
-        {[["2", t3("所试点学校 · 尼日利亚", "pilot schools · Nigeria", "shule za majaribio · Nigeria")], ["6", t3("类专属 Agent", "agent types per learner", "aina za mawakala")], ["3", t3("级直播降级 · 全程录制兜底", "live degradation levels, always recorded", "viwango vya kushuka, hurekodiwa kila wakati")], ["3", t3("种界面语言：中文 · English · Kiswahili", "interface languages: 中文 · English · Kiswahili", "lugha za kiolesura: 中文 · English · Kiswahili")]].map(([v, l], i) => (
+        {[["2", t3("所试点学校 · 尼日利亚", "pilot schools · Nigeria", "shule za majaribio · Nigeria")], ["6", t3("类专属智能体", "agent types per learner", "aina za mawakala")], ["3", t3("级直播降级 · 全程录制兜底", "live degradation levels, always recorded", "viwango vya kushuka, hurekodiwa kila wakati")], ["3", t3("种界面语言：中文 · English · Kiswahili", "interface languages: 中文 · English · Kiswahili", "lugha za kiolesura: 中文 · English · Kiswahili")]].map(([v, l], i) => (
           <div key={i} className={`in in-${i + 2}`}><b>{v as string}</b><span>{t(l as never)}</span></div>
         ))}
       </div>

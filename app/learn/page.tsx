@@ -15,7 +15,7 @@ export default function LearnHome() {
         <div className="hero span2 in">
           <div className="eyebrow" style={{ color: "rgba(255,255,255,.75)" }}>{t(UI.streak)} · {learner.streak} {t(UI.days)}</div>
           <h2>{t(t3("今天再学 15 分钟，就能在停电前完成。", "15 more minutes and you are done before the power cut.", "Dakika 15 zaidi na utamaliza kabla umeme haujakatika."))}</h2>
-          <p>{t(t3("伴学 Agent 已把今天的任务压缩到可离线完成：复习卡、Unit 6 录播（已下载）、第三声 5 组跟读。", "Your Study Companion packed today into offline-ready tasks: review cards, Unit 6 recording (saved), five tone-3 drills.", "Rafiki wa Masomo amepanga kazi za leo ziwezekane nje ya mtandao: kadi za marudio, rekodi ya Unit 6, mazoezi 5 ya toni ya 3."))}</p>
+          <p>{t(t3("伴学智能体已把今天的任务压缩到可离线完成：复习卡、Unit 6 录播（已下载）、第三声 5 组跟读。", "Your Study Companion packed today into offline-ready tasks: review cards, Unit 6 recording (saved), five tone-3 drills.", "Rafiki wa Masomo amepanga kazi za leo ziwezekane nje ya mtandao: kadi za marudio, rekodi ya Unit 6, mazoezi 5 ya toni ya 3."))}</p>
           <div className="row" style={{ marginTop: 20 }}><Link href="/learn/review" className="btn btn--gold">{t(t3("开始复习", "Start review", "Anza marudio"))}</Link><Link href="/learn/lesson" className="btn" style={{ background: "rgba(255,255,255,.15)", borderColor: "rgba(255,255,255,.3)", color: "#fff" }}>{t(t3("看 Unit 6", "Watch Unit 6", "Tazama Unit 6"))}</Link></div>
         </div>
         <Panel className="in in-2"><Head title={t3("本周", "This week", "Wiki hii")} /><div className="row" style={{ gap: 20 }}><Ring v={0.73} size={110} color="var(--accent)" label={<span>{learner.minutesWeek}<small style={{ fontSize: 11, display: "block", color: "var(--mute)" }}>{t(UI.minutes)}</small></span>} /><div><Stat value={learner.xp} label={t3("经验值", "XP", "XP")} delta="+320" /><div className="small mute" style={{ marginTop: 8 }}>{t(t3("目标 200 分钟 · 已完成 73%", "Goal 200 min · 73% done", "Lengo dakika 200 · 73% imekamilika"))}</div></div></div></Panel>
@@ -31,7 +31,7 @@ export default function LearnHome() {
           {weak.map((k) => <div key={k.id} style={{ marginBottom: 12 }}><div className="between small"><b>{k.han} <span className="mute">{k.pinyin}</span></b><span className="mute">{Math.round(k.mastery * 100)}% · {k.n} {t(t3("次", "attempts", "majaribio"))}</span></div><Bar v={k.mastery} tone="bad" /></div>)}
           <div className="small mute">{t(t3("掌握度按置信下界判定，少于 3 题不下结论。", "Mastery uses the confidence lower bound; fewer than 3 attempts means no verdict.", "Umahiri hutumia kikomo cha chini cha uhakika; chini ya majaribio 3 hakuna hukumu."))}</div>
         </Panel>
-        <Panel className="in in-5"><Head title={t3("我的 Agent 今天做了什么", "What your agents did today", "Mawakala wako walifanya nini leo")} more={t3("管理", "Manage", "Dhibiti")} />
+        <Panel className="in in-5"><Head title={t3("我的智能体 今天做了什么", "What your agents did today", "Mawakala wako walifanya nini leo")} more={t3("管理", "Manage", "Dhibiti")} />
           <ul className="list">
             {agents.slice(0, 3).map((a) => <li key={a.id}><span className="avatar" style={{ background: a.color, width: 30, height: 30, fontSize: 10 }}>{t(a.name).slice(0, 1)}</span><div className="t"><b>{t(a.name)}</b><span>{t(a.desc)}</span></div></li>)}
           </ul>

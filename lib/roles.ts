@@ -15,7 +15,7 @@ export const learnerNav: NavItem[] = [
   { href: "/learn/library", label: t3("图书馆", "Library", "Maktaba"), icon: "lib", group: t3("阅读与成长", "Read & grow", "Soma na ukue") },
   { href: "/learn/academy", label: t3("未来书院", "Future Academy", "Future Academy"), icon: "school" },
   { href: "/learn/progress", label: t3("知识星图", "Knowledge map", "Ramani ya maarifa"), icon: "graph" },
-  { href: "/learn/agents", label: t3("我的 Agent", "My agents", "Mawakala wangu"), icon: "bot" },
+  { href: "/learn/agents", label: t3("我的智能体", "My agents", "Mawakala wangu"), icon: "bot" },
   { href: "/learn/certificate", label: t3("证书", "Certificates", "Vyeti"), icon: "cert" },
 ];
 

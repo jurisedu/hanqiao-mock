@@ -4,19 +4,39 @@ import Shell from "@/components/Shell";
 import { Panel, Head, Badge, Bar } from "@/components/ui";
 import Waveform from "@/components/Waveform";
 import { teacherRole, teacherNav } from "@/lib/roles";
-import { useT, useLang, t3, LANGS, type L } from "@/lib/i18n";
+import { useT, t3, LANGS, type Lang, type L } from "@/lib/i18n";
 import { useToast } from "@/components/Toast";
-import { lessons, classes, kps } from "@/lib/data";
+import { lessons, classes, kps, subjectAgents } from "@/lib/data";
 import {
   Wand2, Sparkles, FileText, Presentation, ListChecks, Languages, MessagesSquare, Volume2, ClipboardCheck,
   CheckCircle2, Radio, Layers, Clock, Users, Target, Lightbulb, Play, RefreshCw, Palette, FileDown,
-  PenLine, BookOpen, ShieldCheck, Boxes,
+  PenLine, BookOpen, ShieldCheck, Boxes, Gamepad2, Globe, Mic, BookMarked, Smile, Compass, MapPin,
+  Library, Cpu, Database, Store,
 } from "lucide-react";
+
+/* Countries drive country-specific adaptation (layout / colour / interaction / examples) and set the
+   learner-translation language — the "100-country library" idea, wired to our 18-language system. */
+type Country = { code: string; flag: string; name: L; lang: Lang };
+const COUNTRIES: Country[] = [
+  { code: "cn", flag: "🇨🇳", name: t3("中国", "China", "China"), lang: "zh" },
+  { code: "vn", flag: "🇻🇳", name: t3("越南", "Vietnam", "Vietnam"), lang: "vi" },
+  { code: "id", flag: "🇮🇩", name: t3("印尼", "Indonesia", "Indonesia"), lang: "id" },
+  { code: "my", flag: "🇲🇾", name: t3("马来西亚", "Malaysia", "Malaysia"), lang: "ms" },
+  { code: "th", flag: "🇹🇭", name: t3("泰国", "Thailand", "Thailand"), lang: "th" },
+  { code: "sg", flag: "🇸🇬", name: t3("新加坡", "Singapore", "Singapore"), lang: "en" },
+  { code: "kr", flag: "🇰🇷", name: t3("韩国", "South Korea", "Korea"), lang: "ko" },
+  { code: "mn", flag: "🇲🇳", name: t3("蒙古", "Mongolia", "Mongolia"), lang: "mn" },
+  { code: "ae", flag: "🇦🇪", name: t3("阿联酋 · 迪拜", "UAE · Dubai", "UAE"), lang: "ar" },
+  { code: "ng", flag: "🇳🇬", name: t3("尼日利亚", "Nigeria", "Nigeria"), lang: "en" },
+  { code: "us", flag: "🇺🇸", name: t3("美国", "United States", "Marekani"), lang: "en-US" },
+  { code: "gb", flag: "🇬🇧", name: t3("英国", "United Kingdom", "Uingereza"), lang: "en" },
+];
 
 type Out = { id: string; label: L; icon: typeof FileText };
 const OUTPUTS: Out[] = [
   { id: "plan", label: t3("教案", "Lesson plan", "Mpango wa somo"), icon: FileText },
   { id: "slides", label: t3("课件 PPT", "Slides", "Slaidi"), icon: Presentation },
+  { id: "interactive", label: t3("互动环节", "Interactive", "Mchezo"), icon: Gamepad2 },
   { id: "exercises", label: t3("分层习题", "Tiered exercises", "Mazoezi ya viwango"), icon: ListChecks },
   { id: "vocab", label: t3("生词 · 汉字卡", "Vocab & characters", "Msamiati na herufi"), icon: Languages },
   { id: "dialogue", label: t3("情景对话", "Scenario dialogue", "Mazungumzo"), icon: MessagesSquare },
@@ -24,11 +44,22 @@ const OUTPUTS: Out[] = [
   { id: "quiz", label: t3("随堂测", "Quick quiz", "Jaribio la darasa"), icon: ClipboardCheck },
 ];
 
+/* Art styles, aligned to the education-appropriate styles teachers actually pick. */
 const TEMPLATES = [
-  { id: "min", name: t3("简约", "Minimal", "Rahisi"), bg: "#ffffff", fg: "#141a2e", ac: "#1f3aa8" },
-  { id: "ink", name: t3("水墨", "Ink wash", "Wino"), bg: "linear-gradient(135deg,#f7f4ee,#ece4d3)", fg: "#2a2018", ac: "#9a2f2f" },
-  { id: "kids", name: t3("童趣", "Playful", "Kucheza"), bg: "linear-gradient(135deg,#fff7e6,#ffe7bf)", fg: "#4a3410", ac: "#d8930f" },
-  { id: "pro", name: t3("商务", "Corporate", "Biashara"), bg: "linear-gradient(160deg,#101a3f,#0b1230)", fg: "#eef1fb", ac: "#d4af5a" },
+  { id: "kids", name: t3("卡通童趣", "Playful cartoon", "Katuni"), rec: true, bg: "linear-gradient(135deg,#fff3e0,#ffe0e6)", fg: "#5a3410", ac: "#e8733a" },
+  { id: "water", name: t3("清新水彩", "Watercolour", "Rangi ya maji"), rec: false, bg: "linear-gradient(135deg,#eef6f3,#e3eef7)", fg: "#22303a", ac: "#2f8f6b" },
+  { id: "clean", name: t3("简洁教学", "Clean teaching", "Rahisi"), rec: false, bg: "#ffffff", fg: "#141a2e", ac: "#1f3aa8" },
+  { id: "ink", name: t3("水墨", "Ink wash", "Wino"), rec: false, bg: "linear-gradient(135deg,#f7f4ee,#ece4d3)", fg: "#2a2018", ac: "#9a2f2f" },
+  { id: "pro", name: t3("商务", "Corporate", "Biashara"), rec: false, bg: "linear-gradient(160deg,#101a3f,#0b1230)", fg: "#eef1fb", ac: "#d4af5a" },
+];
+
+const INTERACTIONS: { id: string; label: L; rec: boolean }[] = [
+  { id: "match", label: t3("汉字翻翻乐 · 连连看", "Character match game", "Mchezo wa kufananisha"), rec: true },
+  { id: "roleplay", label: t3("分角色朗读", "Role-play read-aloud", "Kusoma kwa majukumu"), rec: true },
+  { id: "mcq", label: t3("看图选择问答", "Picture multiple-choice", "Maswali ya picha"), rec: true },
+  { id: "tone", label: t3("限读正音 · 声调", "Tone & pronunciation drill", "Toni na matamshi"), rec: false },
+  { id: "sentence", label: t3("句式仿说创编", "Sentence-pattern creation", "Kutunga sentensi"), rec: false },
+  { id: "quiz", label: t3("课堂小测", "In-class quiz", "Jaribio la darasa"), rec: true },
 ];
 
 const SKILLS: { id: string; label: L }[] = [
@@ -39,15 +70,12 @@ const SKILLS: { id: string; label: L }[] = [
   { id: "culture", label: t3("文化", "Culture", "Utamaduni") },
 ];
 
-const GEN_STEPS: L[] = [
-  t3("分析班级学情与薄弱点", "Analysing class needs & weak points", "Kuchambua mahitaji ya darasa"),
-  t3("检索教材 · 知识图谱（带出处）", "Retrieving materials · knowledge graph (with sources)", "Kupata vifaa · grafu ya maarifa"),
-  t3("生成教案与教学环节", "Drafting lesson plan & stages", "Kuandaa mpango wa somo"),
-  t3("排版课件 · AI 配图", "Laying out slides · AI imagery", "Kupanga slaidi · picha za AI"),
-  t3("生成分层习题与随堂测", "Building tiered exercises & quiz", "Kutengeneza mazoezi ya viwango"),
-  t3("合成朗读音频（王老师音色）", "Synthesising audio (Wang laoshi voice)", "Kuunganisha sauti ya mwalimu"),
-  t3("护栏校验 · 待老师签发", "Guardrails · awaiting sign-off", "Ukaguzi · inasubiri idhini"),
-];
+/* The 12 subject agents of the JE array live in lib/data (shared with AgentOps);
+   this maps their lucide icon keys to components. */
+const AGENT_ICONS: Record<string, typeof FileText> = {
+  compass: Compass, smile: Smile, globe: Globe, clipboard: ClipboardCheck, mappin: MapPin, book: BookOpen,
+  library: Library, gamepad: Gamepad2, mic: Mic, bookmarked: BookMarked, palette: Palette, chat: MessagesSquare,
+};
 
 const VOCAB = [
   { han: "菜单", py: "càidān", pos: t3("名", "n.", "n."), en: "menu", stroke: 11 },
@@ -81,23 +109,23 @@ const SLIDES: Slide[] = [
 
 export default function LessonStudio() {
   const t = useT();
-  const { lang } = useLang();
   const toast = useToast();
-  const cur = LANGS.find((l) => l.code === lang);
 
+  const [country, setCountry] = useState("ng");
   const [source, setSource] = useState<"unit" | "topic" | "weak">("unit");
   const [lessonId, setLessonId] = useState("l6");
   const [topic, setTopic] = useState("在餐厅点餐 Ordering at a restaurant");
   const [level, setLevel] = useState("HSK1");
-  const [dur, setDur] = useState(45);
+  const [periods, setPeriods] = useState(2);
   const [classId, setClassId] = useState("c1");
-  const [skills, setSkills] = useState<Record<string, boolean>>({ listen: true, speak: true, read: true, write: true, culture: false });
+  const [style, setStyle] = useState("kids");
+  const [inter, setInter] = useState<Record<string, boolean>>(Object.fromEntries(INTERACTIONS.map((i) => [i.id, i.rec])));
+  const [skills, setSkills] = useState<Record<string, boolean>>({ listen: true, speak: true, read: true, write: true, culture: true });
   const [sel, setSel] = useState<Record<string, boolean>>(Object.fromEntries(OUTPUTS.map((o) => [o.id, true])));
 
   const [status, setStatus] = useState<"idle" | "gen" | "ready">("idle");
-  const [step, setStep] = useState(0);
+  const [tick, setTick] = useState(0);
   const [tab, setTab] = useState("plan");
-  const [tpl, setTpl] = useState(TEMPLATES[0]);
   const [slide, setSlide] = useState(0);
   const [answers, setAnswers] = useState(false);
   const [signed, setSigned] = useState(false);
@@ -106,22 +134,28 @@ export default function LessonStudio() {
 
   const cls = classes.find((c) => c.id === classId)!;
   const lesson = lessons.find((l) => l.id === lessonId)!;
+  const ctry = COUNTRIES.find((c) => c.code === country)!;
+  const transLang = LANGS.find((l) => l.code === ctry.lang);
+  const tpl = TEMPLATES.find((x) => x.id === style)!;
   const weak = kps.filter((k) => k.status === "weak" || k.status === "developing").slice(0, 3);
   const title = source === "unit" ? t(lesson.title) : source === "topic" ? topic : t(t3("薄弱点强化课", "Weak-point booster", "Somo la kuimarisha"));
   const shown = OUTPUTS.filter((o) => sel[o.id]);
   const active = shown.find((o) => o.id === tab)?.id ?? shown[0]?.id;
+  const activeExperts = status === "ready" ? subjectAgents.length : Math.round((tick / 13) * subjectAgents.length);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  const setStyleTpl = (id: string) => setStyle(id);
 
   const generate = () => {
     if (!shown.length) { toast(t(t3("请至少选择一项产出", "Pick at least one output", "Chagua angalau kitu kimoja"))); return; }
     timers.current.forEach(clearTimeout); timers.current = [];
-    setStatus("gen"); setStep(0); setSigned(false); setPushed({});
-    GEN_STEPS.forEach((_, i) => timers.current.push(setTimeout(() => setStep(i + 1), 360 * (i + 1))));
+    setStatus("gen"); setTick(0); setSigned(false); setPushed({});
+    for (let i = 1; i <= 13; i++) timers.current.push(setTimeout(() => setTick(i), 235 * i));
     timers.current.push(setTimeout(() => {
       setStatus("ready"); setSlide(0); setTab(shown[0].id);
-      toast(t(t3("备课已生成 · 待签发", "Lesson pack ready · awaiting sign-off", "Tayari · inasubiri idhini")), { sub: title, tone: "acc" });
-    }, 360 * (GEN_STEPS.length + 1) + 240));
+      toast(t(t3("备课已生成 · 待签发", "Lesson pack ready · awaiting sign-off", "Tayari · inasubiri idhini")), { sub: `${title} · ${t(ctry.name)}`, tone: "acc" });
+    }, 235 * 14 + 200));
   };
 
   const doSign = () => { setSigned(true); toast(t(t3("已签发：进入生产，可推送", "Signed off — live and ready to push", "Imeidhinishwa")), { tone: "good" }); };
@@ -135,18 +169,30 @@ export default function LessonStudio() {
   return (
     <Shell role={teacherRole} nav={teacherNav} net={3}
       title={t3("备课工坊", "Lesson Studio", "Studio ya Maandalizi")}
-      sub={t3("一次输入，AI 生成整套备课：教案 · 课件 · 习题 · 生词卡 · 对话 · 朗读音频 · 随堂测；扎根教材与班级学情，老师签发后一键推送",
-        "One brief, one AI pass — a full lesson pack: plan, slides, exercises, character cards, dialogue, audio and a quiz; grounded in your materials and class data, pushed with one tap after you sign off",
-        "Maandalizi kamili kwa mbofyo mmoja")}
+      sub={t3("JE 引擎驱动 · 12 个学科智能体协同备课：一次输入 → 教案·课件·互动·习题·生词·对话·朗读·随堂测；国别适配 100+，扎根教材与班级学情，老师签发后一键推送",
+        "Powered by the JE Engine — 12 subject agents co-produce a full pack: one brief → plan, slides, interactive games, exercises, vocab, dialogue, audio and a quiz; adapts to 100+ countries, grounded in your materials and class data, pushed once you sign off",
+        "Injini ya JE · mawakala 12 wa masomo huandaa somo pamoja")}
       actions={status === "ready" ? <button className="btn btn--sm" onClick={generate}><RefreshCw size={14} /> {t(t3("重新生成", "Regenerate", "Zalisha upya"))}</button> : undefined}>
 
       <div className="grid c3">
         {/* ---------- Composer ---------- */}
         <Panel className="in in-1" glow>
-          <Head title={t3("备课设置", "Lesson brief", "Maelezo ya somo")} right={<Badge tone="acc"><Sparkles size={12} /> {t(t3("JE Agent", "JE Agent", "JE Agent"))}</Badge>} />
+          <Head title={t3("备课设置", "Lesson brief", "Maelezo ya somo")} right={<Badge tone="acc"><Cpu size={12} /> {t(t3("JE 引擎 · 8 模型 · 16 库", "JE Engine · 8 models · 16 KBs", "Injini ya JE"))}</Badge>} />
+
+          <div className="std-sec">{t(t3("① 教材与目标", "① Material & goal", "① Nyenzo"))}</div>
+          <div className="stdlabel">{t(t3("国别 · 决定版式与母语", "Country · layout & language", "Nchi"))}</div>
+          <div className="ctry">
+            {COUNTRIES.map((c) => (
+              <button key={c.code} className={`ctry__b ${country === c.code ? "on" : ""}`} onClick={() => setCountry(c.code)} title={t(c.name)}>
+                <span className="ctry__f">{c.flag}</span><span className="ctry__n">{t(c.name)}</span>
+              </button>
+            ))}
+          </div>
+          <div className="std-note"><Globe size={13} /> {t(t3("国别课件库 100+ · 本课适配：", "100+ country library · adapted for ", "Maktaba ya nchi 100+ · "))}<b style={{ color: "var(--text)" }}>{ctry.flag} {t(ctry.name)}</b></div>
+
           <div className="stdlabel">{t(t3("来源", "Source", "Chanzo"))}</div>
           <div className="chips">
-            {([["unit", t3("教材章节", "Course unit", "Kitengo")], ["topic", t3("自定义主题", "Custom topic", "Mada")], ["weak", t3("薄弱知识点", "Weak points", "Udhaifu")]] as const).map(([k, l]) =>
+            {([["unit", t3("从教材内容", "From materials", "Vifaa")], ["topic", t3("从教学想法", "From an idea", "Wazo")], ["weak", t3("从薄弱点", "From weak points", "Udhaifu")]] as const).map(([k, l]) =>
               <button key={k} className={`chip ${source === k ? "on" : ""}`} onClick={() => setSource(k)}>{t(l)}</button>)}
           </div>
           {source === "unit" && (
@@ -154,28 +200,40 @@ export default function LessonStudio() {
               {lessons.map((l) => <option key={l.id} value={l.id}>{l.unit} · {t(l.title)}</option>)}
             </select>
           )}
-          {source === "topic" && <input className="std-in" value={topic} onChange={(e) => setTopic(e.target.value)} placeholder={t(t3("输入主题，如：问路", "e.g. asking for directions", "Mada"))} />}
+          {source === "topic" && <input className="std-in" value={topic} onChange={(e) => setTopic(e.target.value)} placeholder={t(t3("描述教学主题或目标，如：问路", "Describe a topic or objective, e.g. asking directions", "Mada"))} />}
           {source === "weak" && <div className="std-note"><Target size={13} /> {t(t3("自动聚焦：", "Auto-focus: ", "Kuzingatia: "))}{weak.map((k) => k.han).join(" · ")}</div>}
 
-          <div className="stdlabel">{t(t3("等级 / 课时", "Level / duration", "Kiwango / muda"))}</div>
+          <div className="stdlabel">{t(t3("等级 / 课时数", "Level / periods", "Kiwango / vipindi"))}</div>
           <div className="chips">
             {["HSK1", "HSK2", "YCT"].map((l) => <button key={l} className={`chip ${level === l ? "on" : ""}`} onClick={() => setLevel(l)}>{l}</button>)}
-            <span style={{ width: 8 }} />
-            {[30, 40, 45].map((d) => <button key={d} className={`chip ${dur === d ? "on" : ""}`} onClick={() => setDur(d)}>{d}′</button>)}
+          </div>
+          <div className="chips" style={{ marginTop: 7 }}>
+            {([[1, t3("1 课时 · 40′", "1 period · 40′", "Kipindi 1")], [2, t3("2 课时 · 课文+字词", "2 periods · text + words", "Vipindi 2")], [3, t3("3 课时+ · 含拓展", "3+ periods · + extension", "Vipindi 3+")]] as const).map(([n, l]) =>
+              <button key={n} className={`chip ${periods === n ? "on" : ""}`} onClick={() => setPeriods(n)}>{t(l)}{n === 2 && <span className="rec">{t(t3("荐", "rec", "-"))}</span>}</button>)}
           </div>
 
+          <div className="std-sec">{t(t3("② 班级与侧重", "② Class & focus", "② Darasa"))}</div>
           <div className="stdlabel">{t(t3("班级（带入学情）", "Class (pulls in data)", "Darasa"))}</div>
           <select className="std-in" value={classId} onChange={(e) => setClassId(e.target.value)}>
             {classes.map((c) => <option key={c.id} value={c.id}>{c.name} · {c.n}{t(t3(" 人", " learners", ""))}</option>)}
           </select>
-          <div className="std-note"><Users size={13} /> {t(t3("薄弱：", "Weak: ", "Dhaifu: "))}{weak.map((k) => `${k.han}`).join(" · ")} · {t(t3("出勤", "att.", "mah."))} {Math.round(cls.attendance * 100)}%</div>
-
+          <div className="std-note"><Users size={13} /> {t(t3("薄弱：", "Weak: ", "Dhaifu: "))}{weak.map((k) => k.han).join(" · ")} · {t(t3("出勤", "att.", "mah."))} {Math.round(cls.attendance * 100)}%</div>
           <div className="stdlabel">{t(t3("技能侧重", "Skill focus", "Ujuzi"))}</div>
           <div className="chips">
             {SKILLS.map((s) => <button key={s.id} className={`chip ${skills[s.id] ? "on" : ""}`} onClick={() => setSkills((x) => ({ ...x, [s.id]: !x[s.id] }))}>{t(s.label)}</button>)}
           </div>
 
-          <div className="stdlabel">{t(t3("产出内容", "Outputs", "Matokeo"))}</div>
+          <div className="std-sec">{t(t3("③ 互动与风格", "③ Activities & style", "③ Shughuli"))}</div>
+          <div className="stdlabel">{t(t3("互动环节", "Interactive activities", "Shughuli"))}</div>
+          <div className="chips">
+            {INTERACTIONS.map((i) => <button key={i.id} className={`chip ${inter[i.id] ? "on" : ""}`} onClick={() => setInter((x) => ({ ...x, [i.id]: !x[i.id] }))}>{t(i.label)}{i.rec && <span className="rec">{t(t3("荐", "rec", "-"))}</span>}</button>)}
+          </div>
+          <div className="stdlabel">{t(t3("美术风格", "Art style", "Mtindo"))}</div>
+          <div className="chips">
+            {TEMPLATES.map((x) => <button key={x.id} className={`chip ${style === x.id ? "on" : ""}`} onClick={() => setStyle(x.id)}>{t(x.name)}{x.rec && <span className="rec">{t(t3("荐", "rec", "-"))}</span>}</button>)}
+          </div>
+
+          <div className="std-sec">{t(t3("④ 产出与语言", "④ Outputs & language", "④ Matokeo"))}</div>
           <div className="optgrid">
             {OUTPUTS.map((o) => { const I = o.icon; const on = sel[o.id]; return (
               <button key={o.id} className={`opt ${on ? "on" : ""}`} onClick={() => setSel((x) => ({ ...x, [o.id]: !x[o.id] }))}>
@@ -183,28 +241,28 @@ export default function LessonStudio() {
               </button>); })}
           </div>
 
-          <div className="std-note"><Languages size={13} /> {t(t3("学生端译文语言：", "Learner translation: ", "Lugha ya tafsiri: "))}<b style={{ color: "var(--text)" }}>{cur?.label}</b> · {t(t3("支持 18 种", "18 supported", "18 zinazotumika"))}</div>
+          <div className="std-note"><Languages size={13} /> {t(t3("学生端译文语言：", "Learner translation: ", "Lugha ya tafsiri: "))}<b style={{ color: "var(--text)" }}>{transLang?.label}</b> · {t(t3("随国别自动选择 · 18 种", "auto by country · 18 supported", "kwa nchi · 18"))}</div>
 
           <button className="btn btn--primary" style={{ width: "100%", marginTop: 14 }} onClick={generate} disabled={status === "gen"}>
-            <Wand2 size={16} /> {status === "gen" ? t(t3("生成中…", "Generating…", "Inazalisha…")) : status === "ready" ? t(t3("重新生成整套备课", "Regenerate full pack", "Zalisha upya")) : t(t3("一键生成整套备课", "Generate full lesson pack", "Zalisha maandalizi"))}
+            <Wand2 size={16} /> {status === "gen" ? t(t3("JE 智能体阵列协同中…", "JE agent array working…", "Mawakala wa JE…")) : status === "ready" ? t(t3("重新生成整套备课", "Regenerate full pack", "Zalisha upya")) : t(t3("一键生成整套备课", "Generate full lesson pack", "Zalisha maandalizi"))}
           </button>
-          <div className="std-fine">{t(t3("平均 40 秒完成一课时备课，相当于教师 90 分钟手工工作量。", "≈40 s per lesson — about 90 minutes of manual prep.", "≈sekunde 40 kwa somo."))}</div>
+          <div className="std-fine">{t(t3("过去一课时优质备课约 20 小时；JE 混合编排智能体阵列 3 分钟完成，再加要求 +5 分钟。", "A polished lesson used to take ~20 hours; the JE agent array does it in 3 minutes, +5 for extra asks.", "Zamani ~saa 20; sasa dakika 3."))}</div>
         </Panel>
 
         {/* ---------- Output stage ---------- */}
         <Panel className="span2 in in-2" lift={false} style={{ minHeight: 560 }}>
-          {status === "idle" && <StudioIdle title={title} shown={shown} />}
-          {status === "gen" && <StudioGen step={step} title={title} />}
+          {status === "idle" && <StudioIdle title={title} shown={shown} ctry={ctry} />}
+          {status === "gen" && <StudioGen activeExperts={activeExperts} tick={tick} title={title} ctry={ctry} />}
           {status === "ready" && active && (
             <>
               <div className="between" style={{ marginBottom: 12, flexWrap: "wrap", gap: 10 }}>
                 <div className="row" style={{ gap: 10 }}>
                   <Badge tone="good" live><CheckCircle2 size={12} /> {t(t3("已生成", "Generated", "Imezalishwa"))}</Badge>
                   <b style={{ fontSize: 15 }}>{title}</b>
-                  <span className="small mute">{level} · {dur}′ · {cls.name}</span>
+                  <span className="small mute">{ctry.flag} {t(ctry.name)} · {level} · {periods}{t(t3(" 课时", "p", ""))} · {cls.name}</span>
                 </div>
                 <div className="row" style={{ gap: 6 }}>
-                  <span className="trace"><span className="ground">{t(t3("出处：", "Sources: ", "Vyanzo: "))}{lesson.unit} · {t(t3("知识图谱", "graph", "grafu"))}</span></span>
+                  <span className="trace"><span className="ground">{t(t3("出处：", "Sources: ", "Vyanzo: "))}{lesson.unit} · {t(t3("知识图谱", "graph", "grafu"))} · 16 KB</span></span>
                 </div>
               </div>
 
@@ -213,10 +271,11 @@ export default function LessonStudio() {
                   <button key={o.id} className={active === o.id ? "on" : ""} onClick={() => setTab(o.id)}><I size={13} style={{ marginRight: 6, verticalAlign: "-2px" }} />{t(o.label)}</button>); })}
               </div>
 
-              {active === "plan" && <TabPlan dur={dur} level={level} weak={weak} />}
-              {active === "slides" && <TabSlides tpl={tpl} setTpl={setTpl} slide={slide} setSlide={setSlide} onExport={() => exp("PPTX")} />}
+              {active === "plan" && <TabPlan periods={periods} level={level} weak={weak} />}
+              {active === "slides" && <TabSlides tpl={tpl} setStyle={setStyleTpl} slide={slide} setSlide={setSlide} ctry={ctry} onExport={() => exp("PPTX")} />}
+              {active === "interactive" && <TabInteractive inter={inter} tpl={tpl} />}
               {active === "exercises" && <TabExercises answers={answers} setAnswers={setAnswers} />}
-              {active === "vocab" && <TabVocab langLabel={cur?.label ?? "English"} />}
+              {active === "vocab" && <TabVocab langLabel={transLang?.label ?? "English"} />}
               {active === "dialogue" && <TabDialogue />}
               {active === "audio" && <TabAudio />}
               {active === "quiz" && <TabQuiz answers={answers} setAnswers={setAnswers} />}
@@ -227,10 +286,10 @@ export default function LessonStudio() {
                   {signed
                     ? <Badge tone="good"><ShieldCheck size={12} /> {t(t3("王老师已签发", "Signed by Wang laoshi", "Imeidhinishwa"))}</Badge>
                     : <button className="btn btn--good btn--sm" onClick={doSign}><ShieldCheck size={14} /> {t(t3("老师签发", "Teacher sign-off", "Idhini ya mwalimu"))}</button>}
-                  <span className="small mute">{t(t3("AI 起草，老师签发后方可进入生产", "AI drafts; nothing goes live until you sign off", "AI huandaa; wewe huidhinisha"))}</span>
+                  <span className="small mute">{t(t3("JE 智能体阵列起草，老师定夺后进入生产（AI 协同，非替代）", "The JE agent array drafts; you decide, then it goes live (AI assists, never replaces)", "Mawakala wa JE huandaa; wewe huamua"))}</span>
                 </div>
                 <div className="row" style={{ gap: 6 }}>
-                  {([["live", t3("推直播", "To live class", "Somo la moja kwa moja"), Radio], ["cards", t3("生成复习卡", "Review cards", "Kadi"), Layers], ["hw", t3("布置作业", "Assign homework", "Kazi"), FileText], ["lib", t3("存内容库", "Save to library", "Maktaba"), Boxes]] as const).map(([id, l, I]) =>
+                  {([["live", t3("推直播", "To live class", "Somo la moja kwa moja"), Radio], ["cards", t3("生成复习卡", "Review cards", "Kadi"), Layers], ["hw", t3("布置作业", "Assign homework", "Kazi"), FileText], ["plaza", t3("发布到课件广场", "Publish to plaza", "Uwanja"), Store], ["lib", t3("存内容库", "Save to library", "Maktaba"), Boxes]] as const).map(([id, l, I]) =>
                     <button key={id} className={`btn btn--sm ${pushed[id] ? "btn--good" : "btn--ghost"}`} onClick={() => push(id, t(l))}>{pushed[id] ? <CheckCircle2 size={13} /> : <I size={13} />} {t(l)}</button>)}
                   <span className="std-sep" />
                   <button className="btn btn--sm btn--ghost" onClick={() => exp("PPTX")}><FileDown size={13} /> PPT</button>
@@ -246,38 +305,56 @@ export default function LessonStudio() {
   );
 }
 
-/* ---------------- idle / generating ---------------- */
-function StudioIdle({ title, shown }: { title: string; shown: Out[] }) {
+/* ---------------- expert team ---------------- */
+function ExpertGrid({ activeCount }: { activeCount: number }) {
   const t = useT();
   return (
-    <div className="std-empty">
-      <div className="std-empty__ic"><Wand2 size={34} /><span className="orbit" /></div>
-      <h3 style={{ fontSize: 18 }}>{t(t3("填好左侧设置，一键生成整套备课", "Set the brief, generate a full lesson pack", "Weka maelezo, zalisha"))}</h3>
-      <p className="mute" style={{ maxWidth: "48ch", margin: "6px auto 0" }}>{t(t3("AI 会扎根你的教材与班级学情，产出教案、课件、习题、生词卡、对话、朗读音频与随堂测——全部可编辑、带出处、老师签发。", "Grounded in your materials and class data: plan, slides, exercises, character cards, dialogue, audio and a quiz — all editable, all sourced, all sign-off gated.", "Kwa kuzingatia vifaa vyako."))}</p>
-      <div className="row" style={{ justifyContent: "center", gap: 6, marginTop: 16, flexWrap: "wrap" }}>
-        {shown.map((o) => { const I = o.icon; return <span key={o.id} className="std-pill"><I size={13} /> {t(o.label)}</span>; })}
-      </div>
-      <div className="std-empty__title">{title}</div>
+    <div className="experts">
+      {subjectAgents.map((e, i) => { const I = AGENT_ICONS[e.icon] ?? FileText; const on = i < activeCount; return (
+        <div key={e.id} className={`expert ${on ? "on" : ""}`}>
+          <span className="expert__ic">{on ? <I size={15} /> : <span className="genlist__dot" />}</span>
+          <span className="expert__t"><b><span className="expert__code">{e.code}</span>{t(e.name)}</b><small>{t(e.role)}</small></span>
+          {on && <CheckCircle2 size={13} className="expert__ck" />}
+        </div>
+      ); })}
     </div>
   );
 }
 
-function StudioGen({ step, title }: { step: number; title: string }) {
+/* ---------------- idle / generating ---------------- */
+function StudioIdle({ title, shown, ctry }: { title: string; shown: Out[]; ctry: Country }) {
   const t = useT();
-  const pct = Math.min(1, step / GEN_STEPS.length);
   return (
-    <div className="std-gen">
-      <div className="between" style={{ marginBottom: 4 }}><b>{t(t3("正在生成：", "Generating: ", "Inazalisha: "))}{title}</b><span className="mono mute">{Math.round(pct * 100)}%</span></div>
+    <div className="std-idle">
+      <div className="between" style={{ marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+        <div className="row" style={{ gap: 10 }}>
+          <div className="std-idle__ic"><Wand2 size={22} /></div>
+          <div><b style={{ fontSize: 16 }}>{t(t3("JE 混合编排智能体阵列 · 就绪", "JE agent array · ready", "Mkusanyiko wa mawakala wa JE · tayari"))}</b><div className="small mute">{t(t3("12 个学科智能体 · JE 引擎 · 8 模型 · 16 知识库", "12 subject agents · JE Engine · 8 models · 16 knowledge bases", "Mawakala 12 · Injini ya JE"))}</div></div>
+        </div>
+        <span className="std-pill">{ctry.flag} {t(ctry.name)}</span>
+      </div>
+      <ExpertGrid activeCount={0} />
+      <div className="std-idle__foot">
+        <p className="mute small" style={{ maxWidth: "60ch" }}>{t(t3("填好左侧设置，点「一键生成」——JE 智能体阵列与你协同，按国别与班级学情产出整套可编辑、带出处、老师签发的备课。", "Set the brief and hit generate — the JE agent array works alongside you to produce a full, editable, sourced, sign-off-gated pack, adapted to the country and your class.", "Weka maelezo, bofya kuzalisha."))}</p>
+        <div className="row" style={{ gap: 6, marginTop: 10, flexWrap: "wrap" }}>
+          {shown.map((o) => { const I = o.icon; return <span key={o.id} className="std-pill"><I size={13} /> {t(o.label)}</span>; })}
+        </div>
+        <div className="std-idle__title">{title} · {ctry.flag} {t(ctry.name)}</div>
+      </div>
+    </div>
+  );
+}
+
+function StudioGen({ activeExperts, tick, title, ctry }: { activeExperts: number; tick: number; title: string; ctry: Country }) {
+  const t = useT();
+  const pct = Math.min(1, tick / 13);
+  return (
+    <div className="std-gen2">
+      <div className="between" style={{ marginBottom: 4 }}><b>{t(t3("JE 智能体阵列协同备课：", "JE agent array co-producing: ", "Mawakala wa JE: "))}{title} · {ctry.flag}</b><span className="mono mute">{Math.round(pct * 100)}%</span></div>
       <Bar v={pct} tone="gold" />
-      <ul className="genlist">
-        {GEN_STEPS.map((s, i) => (
-          <li key={i} className={i < step ? "done" : i === step ? "now" : ""}>
-            <span className="genlist__ic">{i < step ? <CheckCircle2 size={15} /> : i === step ? <span className="spin" /> : <span className="genlist__dot" />}</span>
-            {t(s)}
-          </li>
-        ))}
-      </ul>
-      <div className="trace" style={{ marginTop: 6 }}>
+      <div className="row small mute" style={{ gap: 8, margin: "8px 0 2px" }}><Cpu size={13} /> {t(t3("8 大模型", "8 models", "mifano 8"))} <Database size={13} /> {t(t3("16 套知识库", "16 knowledge bases", "maktaba 16"))} · {t(t3("融合本土国情 + 先进教法", "fusing local context + advanced pedagogy", "muktadha + ufundishaji"))}</div>
+      <ExpertGrid activeCount={activeExperts} />
+      <div className="trace" style={{ marginTop: 12 }}>
         <span className="route">route</span><i>→</i><span className="ground">ground</span><i>→</i><span className="recall">recall</span><i>→</i><span className="verify">verify</span><i>→</i><span className="human">sign-off</span>
       </div>
     </div>
@@ -285,13 +362,13 @@ function StudioGen({ step, title }: { step: number; title: string }) {
 }
 
 /* ---------------- tabs ---------------- */
-function TabPlan({ dur, level, weak }: { dur: number; level: string; weak: typeof kps }) {
+function TabPlan({ periods, level, weak }: { periods: number; level: string; weak: typeof kps }) {
   const t = useT();
   const stages: [string, L, L][] = [
     ["0–5′", t3("热身", "Warm-up", "Kuanza"), t3("复习上节生词，快问快答", "Recycle last unit's words, rapid Q&A", "Kurudia maneno")],
     ["5–15′", t3("导入", "Lead-in", "Utangulizi"), t3("情景视频《在餐厅》+ 生词呈现", "Scene video ‘At the restaurant’ + new words", "Video + maneno mapya")],
     ["15–28′", t3("新授", "Presentation", "Kufundisha"), t3("句型「我要+量词+名词」+ 量词操练", "Pattern ‘我要 + measure word + noun’ + drills", "Mchoro wa sentensi")],
-    ["28–38′", t3("活动", "Activity", "Shughuli"), t3("角色扮演：点餐（两人一组）", "Role-play: ordering (in pairs)", "Igizo: kuagiza")],
+    ["28–38′", t3("互动活动", "Interactive activity", "Shughuli"), t3("汉字翻翻乐 + 角色扮演点餐", "Character match game + ordering role-play", "Mchezo + igizo")],
     ["38–43′", t3("检测", "Check", "Ukaguzi"), t3("随堂小测 5 题，即时反馈", "5-item quick quiz, instant feedback", "Jaribio la maswali 5")],
     ["43–45′", t3("小结与作业", "Wrap-up & homework", "Muhtasari"), t3("复习卡 12 张 + 录音作业", "12 review cards + audio homework", "Kadi 12 + sauti")],
   ];
@@ -308,7 +385,7 @@ function TabPlan({ dur, level, weak }: { dur: number; level: string; weak: typeo
         <div className="kv small">
           <dt>{t(t3("重点", "Focus", "Lengo"))}</dt><dd>{t(t3("点餐句型「我要 + 数量 + 量词 + 食物」", "Pattern ‘我要 + number + measure word + food’", "Mchoro wa kuagiza"))}</dd>
           <dt>{t(t3("难点", "Challenge", "Changamoto"))}</dt><dd>{t(t3("量词搭配；第三声连读", "measure-word pairing; tone-3 sandhi", "vipimo; toni ya 3"))}</dd>
-          <dt>{t(t3("适配", "Adapted", "Imerekebishwa"))}</dt><dd className="mute">{level} · {dur}′ · {t(t3("针对薄弱：", "targets: ", "inalenga: "))}{weak.map((k) => k.han).join(" / ")}</dd>
+          <dt>{t(t3("适配", "Adapted", "Imerekebishwa"))}</dt><dd className="mute">{level} · {periods}{t(t3(" 课时", " periods", ""))} · {t(t3("针对薄弱：", "targets: ", "inalenga: "))}{weak.map((k) => k.han).join(" / ")}</dd>
         </div>
         <div className="std-h" style={{ marginTop: 14 }}><PenLine size={14} /> {t(t3("板书设计", "Board plan", "Ubao"))}</div>
         <div className="boardplan">我要 <b>+</b> 一 <b>+</b> 个 / 瓶 / 碗 <b>+</b> 米饭 / 水</div>
@@ -322,13 +399,13 @@ function TabPlan({ dur, level, weak }: { dur: number; level: string; weak: typeo
             </li>
           ))}
         </ul>
-        <div className="std-note" style={{ marginTop: 8 }}><BookOpen size={13} /> {t(t3("每个环节都可展开为课件页、习题或活动卡。", "Each stage expands into a slide, exercise or activity card.", "Kila hatua hupanuka."))}</div>
+        <div className="std-note" style={{ marginTop: 8 }}><BookOpen size={13} /> {t(t3("每个环节都可展开为课件页、互动游戏或习题。", "Each stage expands into a slide, interactive game or exercise.", "Kila hatua hupanuka."))}</div>
       </div>
     </div>
   );
 }
 
-function TabSlides({ tpl, setTpl, slide, setSlide, onExport }: { tpl: typeof TEMPLATES[number]; setTpl: (t: typeof TEMPLATES[number]) => void; slide: number; setSlide: (n: number) => void; onExport: () => void }) {
+function TabSlides({ tpl, setStyle, slide, setSlide, ctry, onExport }: { tpl: typeof TEMPLATES[number]; setStyle: (id: string) => void; slide: number; setSlide: (n: number) => void; ctry: Country; onExport: () => void }) {
   const t = useT();
   const s = SLIDES[slide];
   return (
@@ -336,7 +413,7 @@ function TabSlides({ tpl, setTpl, slide, setSlide, onExport }: { tpl: typeof TEM
       <div className="between" style={{ marginBottom: 12, flexWrap: "wrap", gap: 10 }}>
         <div className="row" style={{ gap: 6 }}>
           <Palette size={14} className="mute" />
-          {TEMPLATES.map((x) => <button key={x.id} className={`chip ${tpl.id === x.id ? "on" : ""}`} onClick={() => setTpl(x)}>{t(x.name)}</button>)}
+          {TEMPLATES.map((x) => <button key={x.id} className={`chip ${tpl.id === x.id ? "on" : ""}`} onClick={() => setStyle(x.id)}>{t(x.name)}</button>)}
         </div>
         <div className="row" style={{ gap: 6 }}>
           <span className="small mute">{slide + 1} / {SLIDES.length}</span>
@@ -345,6 +422,7 @@ function TabSlides({ tpl, setTpl, slide, setSlide, onExport }: { tpl: typeof TEM
       </div>
       <div className="slidebig" style={{ background: tpl.bg, color: tpl.fg }}>
         <span className="k">{t(s.k)}</span>
+        <span className="slidebig__flag">{ctry.flag} {t(t3("国别适配版", "Localised", "Toleo la nchi"))}</span>
         {s.han && <div className="han" style={{ color: tpl.ac }}>{s.han}</div>}
         <h2>{s.title}</h2>
         {s.sub && <p style={{ marginTop: 8, opacity: .8, fontSize: 15 }}>{s.sub}</p>}
@@ -360,23 +438,95 @@ function TabSlides({ tpl, setTpl, slide, setSlide, onExport }: { tpl: typeof TEM
           </button>
         ))}
       </div>
-      <div className="std-note"><Sparkles size={13} /> {t(t3("配图由 AI 生成并做安全过滤；可替换为教材原图或图库。", "Imagery is AI-generated and safety-filtered; swap in textbook art or stock any time.", "Picha za AI zilizochujwa."))}</div>
+      <div className="std-note"><Sparkles size={13} /> {t(t3("版式·色彩·配图按国别与年龄自动适配；配图 AI 生成并做安全过滤，可替换教材原图。", "Layout, colour and imagery adapt by country and age; images are AI-generated and safety-filtered, swappable for textbook art.", "Muundo hurekebishwa kwa nchi na umri."))}</div>
+    </div>
+  );
+}
+
+function TabInteractive({ inter, tpl }: { inter: Record<string, boolean>; tpl: typeof TEMPLATES[number] }) {
+  const t = useT();
+  const on = (id: string) => inter[id];
+  const mcq = [
+    { py: "yí zuò xuéxiào", han: "一座学校", icon: "🏫" },
+    { py: "yí piàn guǒshùlín", han: "一片果树林", icon: "🌳" },
+    { py: "yì tiáo xiǎohé", han: "一条小河", icon: "🏞️" },
+    { py: "yì tiáo gōnglù", han: "一条公路", icon: "🛣️" },
+  ];
+  return (
+    <div>
+      <div className="std-note" style={{ marginBottom: 12 }}><Gamepad2 size={13} /> {t(t3("由「互动游戏智能体」生成，可直接投屏或推到学生端；每个环节都可编辑。", "Built by the interactive-game agent — project on screen or push to learners; every activity is editable.", "Imetengenezwa na wakala wa michezo."))}</div>
+      <div className="grid c2" style={{ gap: 14 }}>
+        {on("match") && (
+          <div className="game">
+            <div className="between" style={{ marginBottom: 8 }}><b>🃏 {t(t3("汉字翻翻乐", "Character match", "Kufananisha"))}</b><span className="small dim">0 / 6</span></div>
+            <div className="matchgrid">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="matchcell" style={{ background: tpl.ac }}>?</div>)}</div>
+            <div className="small mute" style={{ marginTop: 8 }}>{t(t3("翻卡配对：找到汉字和图片的好朋友！", "Flip to match each character with its picture!", "Geuza kadi kufananisha!"))}</div>
+          </div>
+        )}
+        {on("mcq") && (
+          <div className="game">
+            <div className="between" style={{ marginBottom: 8 }}><b>🖼️ {t(t3("看图选择", "Picture choice", "Chagua picha"))}</b><span className="small dim">shān pō shàng yǒu shén me?</span></div>
+            <div className="mcq">
+              {mcq.map((m, i) => (
+                <div key={i} className="mcq__opt">
+                  <span className="mcq__ic">{m.icon}</span>
+                  <span className="mcq__py">{m.py}</span>
+                  <span className="mcq__han">{m.han}</span>
+                  <span className="mcq__k">{String.fromCharCode(65 + i)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {on("roleplay") && (
+          <div className="game">
+            <div className="between" style={{ marginBottom: 8 }}><b>🎭 {t(t3("分角色朗读", "Role-play read-aloud", "Kusoma majukumu"))}</b><Badge tone="gold"><Volume2 size={11} /> {t(t3("王老师音色", "Teacher voice", "Sauti"))}</Badge></div>
+            <ul className="list small">
+              <li><span className="rolechip a">A</span><div className="t"><b style={{ fontFamily: "var(--serif)" }}>你好！请问要点什么？</b></div><Play size={13} className="mute" /></li>
+              <li><span className="rolechip b">B</span><div className="t"><b style={{ fontFamily: "var(--serif)" }}>我要一碗米饭。</b></div><Play size={13} className="mute" /></li>
+            </ul>
+          </div>
+        )}
+        {on("sentence") && (
+          <div className="game">
+            <div className="between" style={{ marginBottom: 8 }}><b>✏️ {t(t3("句式仿说创编", "Sentence creation", "Kutunga"))}</b><span className="small dim">比喻句「是」</span></div>
+            <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+              {["这件毛衣是晴朗的天空。", "这条裙子是一片草原。"].map((x, i) => <span key={i} className="sentchip">{x}</span>)}
+            </div>
+            <div className="small mute" style={{ marginTop: 8 }}>{t(t3("学生仿照句式，创编自己的比喻句。", "Learners create their own metaphors from the pattern.", "Wanafunzi hutunga sentensi zao."))}</div>
+          </div>
+        )}
+        {on("tone") && (
+          <div className="game">
+            <div className="between" style={{ marginBottom: 8 }}><b>🎯 {t(t3("限读正音 · 声调", "Tone drill", "Toni"))}</b><span className="small dim">tone 3</span></div>
+            <div className="row" style={{ gap: 10 }}>{["nǐ", "hǎo", "wǒ", "hěn"].map((x) => <span key={x} className="tonechip">{x}</span>)}</div>
+            <div className="small mute" style={{ marginTop: 8 }}>{t(t3("跟读评分，第三声连读重点标红。", "Echo-read with scoring; tone-3 sandhi highlighted.", "Soma na alama."))}</div>
+          </div>
+        )}
+        {on("quiz") && (
+          <div className="game">
+            <div className="between" style={{ marginBottom: 8 }}><b>📝 {t(t3("课堂小测", "In-class quiz", "Jaribio"))}</b><span className="small dim">5 {t(t3("题", "items", ""))}</span></div>
+            <div className="small mute">{t(t3("连连看 + 选择 + 听价格，自动判分入知识图谱。", "Match + choose + listen-for-price, auto-graded into the graph.", "Hujipima kiotomatiki."))}</div>
+            <Bar v={0.0} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 function TabExercises({ answers, setAnswers }: { answers: boolean; setAnswers: (b: boolean) => void }) {
   const t = useT();
-  const tiers: { name: L; tone: "good" | "warn" | "acc"; items: { q: string; a: L }[] }[] = [
+  const tiers: { name: L; tone: "good" | "warn" | "acc"; items: { q: L | string; a: L }[] }[] = [
     { name: t3("基础", "Foundation", "Msingi"), tone: "good", items: [
       { q: "我要一（　）米饭。", a: t3("碗（量词）", "碗 (bowl)", "碗") },
       { q: "这是（　）？多少钱？", a: t3("菜单", "菜单 (menu)", "菜单") },
     ] },
     { name: t3("提高", "Stretch", "Kuendeleza"), tone: "warn", items: [
-      { q: t3("用「我要」点两样食物，说一句完整的话。", "Order two items in one full sentence with 我要.", "Agiza vitu viwili."), a: t3("示例：我要一碗米饭和一瓶水。", "e.g. 我要一碗米饭和一瓶水。", "Mfano") } as never,
+      { q: t3("用「我要」点两样食物，说一句完整的话。", "Order two items in one full sentence with 我要.", "Agiza vitu viwili."), a: t3("示例：我要一碗米饭和一瓶水。", "e.g. 我要一碗米饭和一瓶水。", "Mfano") },
     ] },
     { name: t3("挑战", "Challenge", "Changamoto"), tone: "acc", items: [
-      { q: t3("听录音，写出顾客点了什么、一共多少钱。", "Listen and write what was ordered and the total price.", "Sikiliza."), a: t3("米饭×1、水×1；15 块", "rice×1, water×1; ¥15", "wali×1, maji×1; ¥15") } as never,
+      { q: t3("听录音，写出顾客点了什么、一共多少钱。", "Listen and write what was ordered and the total price.", "Sikiliza."), a: t3("米饭×1、水×1；15 块", "rice×1, water×1; ¥15", "wali×1, maji×1; ¥15") },
     ] },
   ];
   return (
@@ -392,7 +542,7 @@ function TabExercises({ answers, setAnswers }: { answers: boolean; setAnswers: (
             <ol className="tier__q">
               {tr.items.map((it, j) => (
                 <li key={j}>
-                  <div className="tier__qt">{typeof it.q === "string" ? it.q : t(it.q as L)}</div>
+                  <div className="tier__qt">{typeof it.q === "string" ? it.q : t(it.q)}</div>
                   {answers && <div className="tier__a">{t(t3("答案：", "Answer: ", "Jibu: "))}{t(it.a)}</div>}
                 </li>
               ))}

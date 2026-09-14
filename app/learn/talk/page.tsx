@@ -15,7 +15,7 @@ export default function Talk() {
   ]);
   const scenes = [t3("餐厅点餐", "Ordering food", "Kuagiza chakula"), t3("问路", "Asking directions", "Kuuliza njia"), t3("自我介绍", "Introducing yourself", "Kujitambulisha"), t3("市场买东西", "At the market", "Sokoni"), t3("求职面试", "Job interview", "Mahojiano ya kazi")];
   return (
-    <Shell role={learnerRole} nav={learnerNav} title={t3("情景对话", "Conversation", "Mazungumzo")} sub={t3("场景：餐厅点餐 · 对话 Agent · 王老师音色", "Scene: ordering food · Conversation Partner · Wang Laoshi's voice", "Mandhari: kuagiza chakula · Mshirika wa Mazungumzo · sauti ya Wang Laoshi")} net={3}>
+    <Shell role={learnerRole} nav={learnerNav} title={t3("情景对话", "Conversation", "Mazungumzo")} sub={t3("场景：餐厅点餐 · 对话智能体 · 王老师音色", "Scene: ordering food · Conversation Partner · Wang Laoshi's voice", "Mandhari: kuagiza chakula · Mshirika wa Mazungumzo · sauti ya Wang Laoshi")} net={3}>
       <div className="grid c3">
         <Panel className="span2 in" lift={false}>
           <div className="chips" style={{ marginBottom: 16 }}>{scenes.map((s, i) => <span key={i} className={`chip ${i === 0 ? "on" : ""}`}>{t(s)}</span>)}</div>
@@ -37,7 +37,7 @@ export default function Talk() {
         </Panel>
         <div className="grid" style={{ alignContent: "start" }}>
           <Panel className="in in-2"><Head title={t3("本轮目标", "Goals this round", "Malengo ya raundi hii")} /><ul className="list">{[["量词 杯 / 个", true], ["想 + 动词", true], ["请问 …", false], ["多少钱？", false]].map(([g, d]) => <li key={g as string}><div className="t"><b>{g}</b></div>{d ? <Badge tone="good">✓</Badge> : <Badge>{t(t3("待用", "Not yet", "Bado"))}</Badge>}</li>)}</ul></Panel>
-          <Panel className="in in-3"><Head title={t3("对话 Agent 的边界", "Where the partner stops", "Mipaka ya mshirika")} /><p className="small mute">{t(t3("只在课程词表与语法范围内对话；遇到超纲问题会告诉你「这个我们还没学」，并把问题记给老师。每次对话结束后，薄弱点写入知识星图。", "It stays within the course word list and grammar. Beyond that it says “we have not learned this yet” and logs the question for your teacher. Weak points go to your knowledge map after each session.", "Hubaki ndani ya orodha ya maneno na sarufi ya kozi. Nje ya hapo husema “hatujajifunza hili bado” na huandika swali kwa mwalimu. Sehemu dhaifu huenda kwenye ramani ya maarifa."))}</p></Panel>
+          <Panel className="in in-3"><Head title={t3("对话智能体的边界", "Where the partner stops", "Mipaka ya mshirika")} /><p className="small mute">{t(t3("只在课程词表与语法范围内对话；遇到超纲问题会告诉你「这个我们还没学」，并把问题记给老师。每次对话结束后，薄弱点写入知识星图。", "It stays within the course word list and grammar. Beyond that it says “we have not learned this yet” and logs the question for your teacher. Weak points go to your knowledge map after each session.", "Hubaki ndani ya orodha ya maneno na sarufi ya kozi. Nje ya hapo husema “hatujajifunza hili bado” na huandika swali kwa mwalimu. Sehemu dhaifu huenda kwenye ramani ya maarifa."))}</p></Panel>
           <Panel className="in in-4"><Head title={t3("最近三次", "Last three sessions", "Vipindi vitatu vilivyopita")} /><ul className="list">{[["09-04", "问路", 84], ["09-02", "自我介绍", 91], ["08-30", "点餐", 72]].map(([d, s, v]) => <li key={d as string}><div className="t"><b>{s}</b><span>{d}</span></div><Badge tone={(v as number) >= 85 ? "good" : "warn"}>{v}</Badge></li>)}</ul></Panel>
         </div>
       </div>

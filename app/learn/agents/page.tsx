@@ -8,7 +8,7 @@ import { agents } from "@/lib/data";
 export default function Agents() {
   const t = useT();
   return (
-    <Shell role={learnerRole} nav={learnerNav} title={t3("我的 Agent", "My agents", "Mawakala wangu")} sub={t3("专属花名册 · 可定制风格、语速、母语提示与提醒时段", "Personal roster · customise style, pace, first-language hints and reminder windows", "Orodha binafsi · badilisha mtindo, kasi, vidokezo vya lugha ya kwanza na vikumbusho")} net={3}>
+    <Shell role={learnerRole} nav={learnerNav} title={t3("我的智能体", "My agents", "Mawakala wangu")} sub={t3("专属花名册 · 可定制风格、语速、母语提示与提醒时段", "Personal roster · customise style, pace, first-language hints and reminder windows", "Orodha binafsi · badilisha mtindo, kasi, vidokezo vya lugha ya kwanza na vikumbusho")} net={3}>
       <div className="grid c3">
         {agents.map((a, i) => (
           <Tilt key={a.id} max={6}><Panel className={`in in-${i + 1}`} style={{ minHeight: 230 }}>

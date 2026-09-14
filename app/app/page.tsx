@@ -118,7 +118,7 @@ export default function AppShowcase() {
           </svg>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", fontSize: 10 }}>{kps.slice(0, 4).map((k) => <span key={k.id} className="badge" style={{ fontSize: 10 }}>{k.han} {Math.round(k.mastery * 100)}%</span>)}</div>
           <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)" }}>
-            <div className="eyebrow" style={{ fontSize: 9 }}>{T("Agent 记住了", "Your agent remembers", "Wakala wako anakumbuka")}</div>
+            <div className="eyebrow" style={{ fontSize: 9 }}>{T("智能体记住了", "Your agent remembers", "Wakala wako anakumbuka")}</div>
             <div style={{ fontSize: 11.5, marginTop: 6, lineHeight: 1.6 }}>· {T("你说过「想在 12 月前考 HSK 1」", "You said “I want to pass HSK 1 by December”", "Ulisema “Nataka kufaulu HSK 1 kabla ya Desemba”")}<br />· {T("第三声连续 3 周薄弱（12 次作答）", "Tone 3 weak for 3 weeks (12 attempts)", "Toni ya 3 dhaifu wiki 3")}<br />· {T("晚 8 点学习效果最好", "You learn best at 8 pm", "Unajifunza vizuri saa 2 usiku")}</div>
           </div>
         </Phone>

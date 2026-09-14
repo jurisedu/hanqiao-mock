@@ -10,7 +10,7 @@ export default function Proposals() {
   const t = useT();
   const [state, setState] = useState<Record<string, string>>({});
   return (
-    <Shell role={teacherRole} nav={teacherNav} title={t3("AI 提议收件箱", "AI proposal inbox", "Kikasha cha mapendekezo ya AI")} sub={t3("Agent 只能提议，不能执行；你批准后系统才写，并留哈希链", "Agents can only propose; the system writes only after your approval, with a hash chain", "Mawakala hupendekeza tu; mfumo huandika baada ya idhini yako")} net={3}>
+    <Shell role={teacherRole} nav={teacherNav} title={t3("AI 提议收件箱", "AI proposal inbox", "Kikasha cha mapendekezo ya AI")} sub={t3("智能体只能提议，不能执行；你批准后系统才写，并留哈希链", "Agents can only propose; the system writes only after your approval, with a hash chain", "Mawakala hupendekeza tu; mfumo huandika baada ya idhini yako")} net={3}>
       <div className="grid c3">
         <div className="span2 grid">
           {proposals.map((p, i) => {
@@ -27,7 +27,7 @@ export default function Proposals() {
           })}
         </div>
         <div className="grid" style={{ alignContent: "start" }}>
-          <Panel className="in in-2" gold><Head title={t3("为什么要审批", "Why approval", "Kwa nini idhini")} /><p className="small mute">{t(t3("写动作（安排练习、调整进度、发证书）一律 propose → approve → execute。Agent 永远没有写权限；每个决定盖防篡改哈希，可审计。", "Every write action (assigning drills, changing pace, issuing certificates) goes propose → approve → execute. Agents never hold write permission; every decision is hashed and auditable.", "Kila kitendo cha kuandika huenda pendekeza → kubali → tekeleza. Mawakala hawana ruhusa ya kuandika."))}</p></Panel>
+          <Panel className="in in-2" gold><Head title={t3("为什么要审批", "Why approval", "Kwa nini idhini")} /><p className="small mute">{t(t3("写动作（安排练习、调整进度、发证书）一律 propose → approve → execute。智能体永远没有写权限；每个决定盖防篡改哈希，可审计。", "Every write action (assigning drills, changing pace, issuing certificates) goes propose → approve → execute. Agents never hold write permission; every decision is hashed and auditable.", "Kila kitendo cha kuandika huenda pendekeza → kubali → tekeleza. Mawakala hawana ruhusa ya kuandika."))}</p></Panel>
           <Panel className="in in-3"><Head title={t3("本月", "This month", "Mwezi huu")} /><dl className="kv"><dt>{t(t3("提议", "Proposals", "Mapendekezo"))}</dt><dd>38</dd><dt>{t(t3("批准率", "Approval rate", "Kiwango cha kukubali"))}</dt><dd>84%</dd><dt>{t(t3("修改后批准", "Edited then approved", "Yamehaririwa"))}</dt><dd>9</dd><dt>{t(t3("平均处理", "Median handling", "Wastani wa kushughulikia"))}</dt><dd>14 s</dd></dl></Panel>
         </div>
       </div>

@@ -39,7 +39,7 @@ const STRIPS: Record<string, Array<{ icon: LucideIcon; k: L; v: string | L; tone
   ops: [
     { icon: Activity, k: { zh: "服务可用性", en: "Availability", sw: "Upatikanaji" }, v: "99.95%", tone: "good" },
     { icon: Users, k: { zh: "活跃学员", en: "Active", sw: "Hai" }, v: "264" },
-    { icon: Cpu, k: { zh: "Agent 错误率", en: "Agent error", sw: "Makosa" }, v: "2.1%", tone: "good" },
+    { icon: Cpu, k: { zh: "智能体错误率", en: "Agent error", sw: "Makosa" }, v: "2.1%", tone: "good" },
     { icon: Wallet, k: { zh: "月预算", en: "Budget", sw: "Bajeti" }, v: "238 / 400" },
   ],
   school: [
