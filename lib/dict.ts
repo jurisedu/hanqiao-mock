@@ -7,9 +7,9 @@ import GENERATED from "./dict.generated.json";
 export type Entry = [string, string, string, string];
 export const CORE: Record<string, Entry> = {
   // brand & environment
-  "HanQiao": ["HanQiao", "HanQiao", "HanQiao", "HanQiao"],
-  "GACEE Chinese learning platform": ["Plateforme d'apprentissage du chinois GACEE", "Plataforma de aprendizaje de chino GACEE", "GACEE-leerplatform voor Chinees", "Platform belajar bahasa Mandarin GACEE"],
-  "GACEE Chinese learning platform · preview environment": ["Plateforme GACEE · environnement de démonstration", "Plataforma GACEE · entorno de demostración", "GACEE-platform · demo-omgeving", "Platform GACEE · lingkungan demo"],
+  "SHANHAI TONGWEN": ["SHANHAI TONGWEN", "SHANHAI TONGWEN", "SHANHAI TONGWEN", "SHANHAI TONGWEN"],
+  "AI Chinese learning platform": ["Plateforme d'apprentissage du chinois GACEE", "Plataforma de aprendizaje de chino GACEE", "GACEE-leerplatform voor Chinees", "Platform belajar bahasa Mandarin GACEE"],
+  "AI Chinese learning platform · preview environment": ["Plateforme GACEE · environnement de démonstration", "Plataforma GACEE · entorno de demostración", "GACEE-platform · demo-omgeving", "Platform GACEE · lingkungan demo"],
   "Preview environment": ["Environnement de démonstration", "Entorno de demostración", "Demo-omgeving", "Lingkungan demo"],
   "Preview environment · all data is sample data": ["Environnement de démonstration · toutes les données sont fictives", "Entorno de demostración · todos los datos son de muestra", "Demo-omgeving · alle gegevens zijn voorbeeldgegevens", "Lingkungan demo · semua data adalah contoh"],
   "Language": ["Langue", "Idioma", "Taal", "Bahasa"],

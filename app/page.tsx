@@ -22,7 +22,7 @@ export default function Landing() {
   return (
     <div className="landing">
       <div className="landing__top">
-        <div className="side__brand"><Image src="/seal.png" alt="" width={40} height={40} /><span><b style={{ letterSpacing: ".14em" }}>{t(t3("汉桥", "HanQiao", "HanQiao"))}</b><small className="mute" style={{ display: "block", fontSize: 11 }}>{t(t3("GACEE 中文学习平台 · 演示环境", "GACEE Chinese learning platform · preview environment", "Jukwaa la GACEE · mazingira ya onyesho"))}</small></span></div>
+        <div className="side__brand"><Image src="/seal.png" alt="" width={40} height={40} /><span><b style={{ letterSpacing: ".14em" }}>{t(t3("山海同文", "SHANHAI TONGWEN", "SHANHAI TONGWEN"))}</b><small className="mute" style={{ display: "block", fontSize: 11 }}>{t(t3("AI 中文学习平台 · 演示环境", "AI Chinese learning platform · preview environment", "Jukwaa la GACEE · mazingira ya onyesho"))}</small></span></div>
         <div className="row"><EnvBadge /><LangSwitch /><Link href="/app" className="btn btn--sm">{t(t3("App 界面", "App screens", "Skrini za App"))}</Link><Link href="/login" className="btn btn--primary btn--sm">{t(t3("登录", "Sign in", "Ingia"))}</Link></div>
       </div>
       <section className="landing__hero">

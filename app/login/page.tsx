@@ -23,7 +23,7 @@ export default function Login() {
       <div className="panel in" style={{ width: "min(960px, 100%)", padding: 0, display: "grid", gridTemplateColumns: "1.1fr 1fr", overflow: "hidden" }}>
         <div style={{ padding: 40, background: "linear-gradient(160deg, rgba(108,140,255,.25), rgba(212,175,90,.12))", position: "relative" }}>
           <div className="orbit" />
-          <div className="side__brand" style={{ position: "relative" }}><Image src="/seal.png" alt="" width={44} height={44} /><span><b style={{ letterSpacing: ".14em", fontSize: 18 }}>HanQiao 汉桥</b><small className="mute" style={{ display: "block" }}>learn.gacee.org</small></span></div>
+          <div className="side__brand" style={{ position: "relative" }}><Image src="/seal.png" alt="" width={44} height={44} /><span><b style={{ letterSpacing: ".14em", fontSize: 18 }}>SHANHAI TONGWEN 山海同文</b><small className="mute" style={{ display: "block" }}>learn.gacee.org</small></span></div>
           <h1 style={{ fontFamily: "var(--serif)", fontSize: 34, marginTop: 40, position: "relative" }}>{t(t3("一个账号，学、练、读、考。", "One account: learn, practise, read, test.", "Akaunti moja: jifunze, fanya mazoezi, soma, fanya mtihani."))}</h1>
           <p className="mute" style={{ marginTop: 12, position: "relative" }}>{t(t3("断网也能继续学习，联网后自动同步。一部手机可以切换多个学员账号。", "Keep learning offline and sync when you reconnect. One phone can switch between several learners.", "Endelea kujifunza nje ya mtandao na usawazishe ukiunganishwa. Simu moja inaweza kubadilisha wanafunzi kadhaa."))}</p>
           <div className="row" style={{ marginTop: 28, position: "relative" }}><EnvBadge /><LangSwitch /></div>

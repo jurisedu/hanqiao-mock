@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { useT, type L } from "@/lib/i18n";
 
 export function Panel({ children, className = "", glow = false, gold = false, lift = true, style }: { children: ReactNode; className?: string; glow?: boolean; gold?: boolean; lift?: boolean; style?: React.CSSProperties }) {
@@ -63,7 +63,7 @@ export function Spark({ data, color = "var(--accent)", h = 44, fill = true }: { 
   const w = 160, max = Math.max(...data), min = Math.min(...data);
   const pts = data.map((d, i) => [i * (w / (data.length - 1)), h - 4 - ((d - min) / (max - min || 1)) * (h - 8)]);
   const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
-  const id = useRef("g" + Math.random().toString(36).slice(2, 7)).current;
+  const id = "g" + useId().replace(/[:»]/g, "");
   return (
     <svg viewBox={`0 0 ${w} ${h}`} width="100%" height={h} preserveAspectRatio="none" aria-hidden="true">
       <defs><linearGradient id={id} x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor={color} stopOpacity=".35" /><stop offset="1" stopColor={color} stopOpacity="0" /></linearGradient></defs>

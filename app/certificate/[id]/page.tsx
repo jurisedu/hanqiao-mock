@@ -24,7 +24,7 @@ export default function Verify({ params }: { params: Promise<{ id: string }> }) 
           <dt>{t(t3("技术", "Technology", "Teknolojia"))}</dt><dd>Juris&amp;Edu AI Technology</dd>
         </dl>
         <p className="small mute" style={{ marginTop: 20 }}>{t(t3("本页只显示核验所需的最少信息；完整学习报告仅持有人与授权机构可见。", "This page shows the minimum needed to verify; the full learning report is visible only to the holder and authorised institutions.", "Ukurasa huu huonyesha taarifa ndogo zinazohitajika kuthibitisha."))}</p>
-        <Link href="/" className="btn btn--sm" style={{ marginTop: 16 }}>← HanQiao</Link>
+        <Link href="/" className="btn btn--sm" style={{ marginTop: 16 }}>← SHANHAI TONGWEN</Link>
       </div>
     </div>
   );
