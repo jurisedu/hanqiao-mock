@@ -352,7 +352,9 @@ body.learner .langpop{background:#fff;box-shadow:0 20px 60px rgba(20,25,40,.16)}
 .langpop__empty{padding:20px;text-align:center;color:var(--mute);font-size:13px}
 
 /* ---------- Lesson Studio ---------- */
-.stdlabel{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:13px 0 6px}
+.stdlabel{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:17px 0 8px}
+.std-in + .stdlabel, .chips + .stdlabel{margin-top:18px}
+.chips + .std-in, .chips + .std-note, .optgrid + .std-note{margin-top:8px}
 .std-sec{display:flex;align-items:center;gap:10px;margin:22px 0 8px;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--accent-2)}
 .std-sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-2),transparent)}
 .std-sec:first-of-type{margin-top:12px}

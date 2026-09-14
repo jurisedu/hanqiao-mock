@@ -203,11 +203,12 @@ export default function LessonStudio() {
           {source === "topic" && <input className="std-in" value={topic} onChange={(e) => setTopic(e.target.value)} placeholder={t(t3("描述教学主题或目标，如：问路", "Describe a topic or objective, e.g. asking directions", "Mada"))} />}
           {source === "weak" && <div className="std-note"><Target size={13} /> {t(t3("自动聚焦：", "Auto-focus: ", "Kuzingatia: "))}{weak.map((k) => k.han).join(" · ")}</div>}
 
-          <div className="stdlabel">{t(t3("等级 / 课时数", "Level / periods", "Kiwango / vipindi"))}</div>
+          <div className="stdlabel">{t(t3("等级", "Level", "Kiwango"))}</div>
           <div className="chips">
             {["HSK1", "HSK2", "YCT"].map((l) => <button key={l} className={`chip ${level === l ? "on" : ""}`} onClick={() => setLevel(l)}>{l}</button>)}
           </div>
-          <div className="chips" style={{ marginTop: 7 }}>
+          <div className="stdlabel">{t(t3("课时数", "Periods", "Vipindi"))}</div>
+          <div className="chips">
             {([[1, t3("1 课时 · 40′", "1 period · 40′", "Kipindi 1")], [2, t3("2 课时 · 课文+字词", "2 periods · text + words", "Vipindi 2")], [3, t3("3 课时+ · 含拓展", "3+ periods · + extension", "Vipindi 3+")]] as const).map(([n, l]) =>
               <button key={n} className={`chip ${periods === n ? "on" : ""}`} onClick={() => setPeriods(n)}>{t(l)}{n === 2 && <span className="rec">{t(t3("荐", "rec", "-"))}</span>}</button>)}
           </div>
