@@ -22,6 +22,7 @@ export const learnerNav: NavItem[] = [
 export const teacherRole: Role = { key: "teach", label: t3("远程中文老师 · 郑州", "Remote Chinese teacher · Zhengzhou", "Mwalimu wa Kichina · Zhengzhou"), name: "王老师", initials: "王", tone: "gold" };
 export const teacherNav: NavItem[] = [
   { href: "/teach", label: t3("工作台", "Workbench", "Dawati"), icon: "home" },
+  { href: "/teach/studio", label: t3("备课工坊", "Lesson Studio", "Studio ya Maandalizi"), icon: "studio", pill: "AI" },
   { href: "/teach/review", label: t3("复核队列", "Review queue", "Foleni ya ukaguzi"), icon: "check", pill: "3" },
   { href: "/teach/proposals", label: t3("AI 提议", "AI proposals", "Mapendekezo ya AI"), icon: "inbox", pill: "2" },
   { href: "/teach/class/c1", label: t3("班级学情", "Class insight", "Hali ya darasa"), icon: "users", group: t3("教学", "Teaching", "Ufundishaji") },

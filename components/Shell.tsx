@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
-import { Home, PlayCircle, Radio, ClipboardCheck, Mic, MessagesSquare, Layers, Camera, Orbit, Bot, Library, GraduationCap, Award, CheckCircle2, Inbox, Users, Video, CalendarDays, Activity, ShieldCheck, CreditCard, FolderKanban, BookOpen, Globe, Smartphone, Sparkles, Search, Languages as LanguagesIcon, LifeBuoy, Flame, Download, Clock, Cpu, Wallet, Wifi, ChevronRight, type LucideIcon } from "lucide-react";
+import { Home, PlayCircle, Radio, ClipboardCheck, Mic, MessagesSquare, Layers, Camera, Orbit, Bot, Library, GraduationCap, Award, CheckCircle2, Inbox, Users, Video, CalendarDays, Activity, ShieldCheck, CreditCard, FolderKanban, BookOpen, Globe, Smartphone, Sparkles, Search, Languages as LanguagesIcon, LifeBuoy, Flame, Download, Clock, Cpu, Wallet, Wifi, ChevronRight, Wand2, type LucideIcon } from "lucide-react";
 import { useT, UI, type L } from "@/lib/i18n";
 import LangSwitch from "./LangSwitch";
 import EnvBadge from "./EnvBadge";
@@ -14,7 +14,7 @@ export type Role = { key: string; label: L; name: string; initials: string; tone
 
 const ICONS: Record<string, LucideIcon> = {
   home: Home, play: PlayCircle, live: Radio, exam: ClipboardCheck, mic: Mic, chat: MessagesSquare, cards: Layers, cam: Camera, graph: Orbit, bot: Bot, lib: Library, school: GraduationCap, cert: Award,
-  check: CheckCircle2, inbox: Inbox, users: Users, rec: Video, cal: CalendarDays, ops: Activity, shield: ShieldCheck, pay: CreditCard, content: FolderKanban, pub: BookOpen, globe: Globe, phone: Smartphone, star: Sparkles, languages: LanguagesIcon, support: LifeBuoy,
+  check: CheckCircle2, inbox: Inbox, users: Users, rec: Video, cal: CalendarDays, ops: Activity, shield: ShieldCheck, pay: CreditCard, content: FolderKanban, pub: BookOpen, globe: Globe, phone: Smartphone, star: Sparkles, languages: LanguagesIcon, support: LifeBuoy, studio: Wand2,
 };
 
 export function Icon({ name, className = "ic", size = 18 }: { name: string; className?: string; size?: number }) {

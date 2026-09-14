@@ -5,6 +5,7 @@ import { Panel, Head, Stat, Badge, Bar, Spark, Trace } from "@/components/ui";
 import { teacherRole, teacherNav } from "@/lib/roles";
 import { useT, t3 } from "@/lib/i18n";
 import { classes, reviewQueue, proposals, news } from "@/lib/data";
+import { Wand2 } from "lucide-react";
 
 export default function TeachHome() {
   const t = useT();
@@ -18,7 +19,7 @@ export default function TeachHome() {
         <Panel className="span2 in in-2"><Head title={t3("班主任 Agent · 今晨摘要", "Homeroom Agent · morning brief", "Wakala wa Darasa · muhtasari wa asubuhi")} right={<Badge tone="acc">{t(t3("草拟，未发送", "Draft, not sent", "Rasimu, haijatumwa"))}</Badge>} />
           <p style={{ fontSize: 15, lineHeight: 1.8 }}>{t(t3("Great Heights A 班昨晚停电 2 小时，41 人仍完成离线练习；New Horizon B 班 6 人 Unit 5 下载失败（2G），已提议改推纯音频版。Chidi 的第三声出现评分分歧，建议周三直播用 3 分钟带读。Amara 在作文里写「把我们的故事讲给世界听」，可作范文（需家长同意）。", "Great Heights A lost power for 2 h last night; 41 learners still finished offline practice. Six in New Horizon B failed to download Unit 5 on 2G; an audio-only push is proposed. Chidi's tone 3 has a scoring disagreement; suggest a 3-minute drill in Wednesday's live class. Amara wrote “tell our story to the world” in her essay, a candidate model text (needs parental consent).", "Great Heights A ilikosa umeme saa 2; wanafunzi 41 walimaliza mazoezi nje ya mtandao. Sita katika New Horizon B walishindwa kupakua Unit 5; sauti pekee imependekezwa."))}</p>
           <div style={{ marginTop: 12 }}><Trace steps={[["route", t(t3("路由：班级学情", "route: class insight", "njia: hali ya darasa"))], ["ground", t(t3("依据：出勤 / 下载 / 掌握度", "ground: attendance / downloads / mastery", "msingi: mahudhurio / upakuaji / umahiri"))], ["recall", t(t3("召回：上周备注", "recall: last week's notes", "kumbuka: maelezo ya wiki iliyopita"))], ["human", t(t3("老师决定是否发送", "teacher decides to send", "mwalimu anaamua"))]]} /></div>
-          <div className="row" style={{ marginTop: 14 }}><Link href="/teach/proposals" className="btn btn--primary btn--sm">{t(t3("处理 2 条提议", "Handle 2 proposals", "Shughulikia mapendekezo 2"))}</Link><button className="btn btn--sm">{t(t3("发给家长群（英文）", "Send to parents (English)", "Tuma kwa wazazi (Kiingereza)"))}</button></div>
+          <div className="row" style={{ marginTop: 14 }}><Link href="/teach/proposals" className="btn btn--primary btn--sm">{t(t3("处理 2 条提议", "Handle 2 proposals", "Shughulikia mapendekezo 2"))}</Link><Link href="/teach/studio" className="btn btn--sm"><Wand2 size={14} /> {t(t3("为周三这节课备课", "Prep Wednesday's lesson", "Andaa somo la Jumatano"))}</Link><button className="btn btn--sm">{t(t3("发给家长群（英文）", "Send to parents (English)", "Tuma kwa wazazi (Kiingereza)"))}</button></div>
         </Panel>
         <Panel className="span2 in in-3"><Head title={t3("复核队列", "Review queue", "Foleni ya ukaguzi")} more={t3("全部", "All", "Zote")} />
           <ul className="list">{reviewQueue.slice(0, 3).map((r) => <li key={r.id}><Badge tone={r.kind === "sign" ? "good" : r.kind === "decide" ? "warn" : "bad"}>{r.kind === "sign" ? t(t3("签发", "Sign", "Idhinisha")) : r.kind === "decide" ? t(t3("裁定", "Decide", "Amua")) : t(t3("批改", "Grade", "Sahihisha"))}</Badge><div className="t"><b>{r.learner} · {t(r.type)}</b><span>{t(r.ai)}</span></div><span className="small mono mute">{r.confidence ? Math.round(r.confidence * 100) + "%" : "—"}</span></li>)}</ul>
